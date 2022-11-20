@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
-class rolSeeder extends Seeder
+class oficinaSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -13,26 +13,19 @@ class rolSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('roles')->insert([
+        DB::table('oficinas')->insert([
             [
             'id' => 1,
-            'nombre' => 'Administrador',
-            'estado' => 1,
-            'oficina_id'=>null,
+            'nombre' => 'Gestion Acádemica',
             ],
             [
             'id' => 2,
-            'nombre' => 'Meza de partes',
-            'estado' => 1,
-            'oficina_id'=>null,
+            'nombre' => 'Direccion general',
             ],
             [
             'id' => 3,
-            'nombre' => 'Unidad orgánica',
-            'estado' => 1,
-            'oficina_id'=>1,
+            'nombre' => 'Gerencia',
             ],
-            
             
         ]);
     }

@@ -1,8 +1,25 @@
 <template >
-    <v-card>
+    <v-card class="mx-2 mt-3">
         <v-card-title>
-            {{msg}}
+            {{hola}}
         </v-card-title>
+
+       <v-card>
+            <v-card-title>
+            <v-text-field
+                v-model="search"
+                append-icon="mdi-magnify"
+                label="Buscar Documento"
+                single-line
+                hide-details
+            ></v-text-field>
+            </v-card-title>
+            <v-data-table
+            :headers="headers"
+            :items="documentos"
+            :search="search"
+            ></v-data-table>
+        </v-card>
     </v-card>
 </template>
 <script>
@@ -11,7 +28,16 @@ import Form from "vform";
 export default {
    data(){
     return{
-        msg:'Vienvenido Meza de partes'
+        hola:'Vienvenido a Meza de partes',
+        search: '',
+        headers: [
+          { text: 'Codigo',align: 'start', value: 'id' },
+          { text: 'Documento',align: 'start', value: 'documento' },
+          { text: 'fecha', value: 'fecha' },
+          { text: 'Responsable', value: 'user' },
+         
+        ],
+        documentos:[],
     }
    }
 }
