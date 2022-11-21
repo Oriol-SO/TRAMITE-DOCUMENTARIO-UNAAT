@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\documento;
+use App\Models\oficina;
 use App\Models\Proceso;
 use Carbon\Carbon;
 use Exception;
@@ -66,11 +67,33 @@ class DocumentoController extends Controller
                 'dni'=>$d->dni,
                 'destino'=>$d->destino,
                 'tipo'=>$d->tipo,
-                'proceso'=>Proceso::where('documento_id',$d->id)->get(),
+                'proceso'=>Proceso::where('documento_id',$d->id)->get()->map(function($p){
+                    $oficina_i=oficina::where('id',$p->oficina_input)->first();
+                    $oficina_o=oficina::where('id',$p->oficina_ouput)->first();
+                    return[
+                        'id'=>$p->id,
+                        'recepcion'=>$p->recepcion,
+                        'derivar'=>$p->derivar,
+                        'oficina_input'=>$p->oficina_input,
+                        'oficina_ouput'=>$p->oficina_ouput,
+                        'nom_input'=>$oficina_i?$oficina_i->nombre:null,
+                        'nom_ouput'=>$oficina_o?$oficina_o->nombre:null,
+                    ];
+                }),
             ];
         }catch(Exception $e){
+            return $e;
             return response()->json(['message'=>'Error al obtener datos'],405);
         }
+    }
+
+    public function derrivar_doc(Request $request){
+        $request->validate([
+            'oficina'=>'required',
+            'documento'=>'required',
+        ]);
+
+        return $request;
     }
 }
 

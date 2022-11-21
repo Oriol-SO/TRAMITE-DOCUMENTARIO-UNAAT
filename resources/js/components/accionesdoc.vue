@@ -6,25 +6,91 @@
             </v-card-title>
             <v-card-text>
                 <v-card v-for="(proc,i) in dato.proceso" :key="i">
-                    <v-row>
-                        <v-col cols="4"><strong>Fecha de recepción:</strong> </v-col>
-                        <v-col cols="4">{{proc.recepcion}}</v-col>
-                    </v-row>
-                    <v-row>
-                        <v-col cols="4"><strong>Fecha de derivación:</strong></v-col>
-                        <v-col cols="4">{{proc.derivar}}</v-col>
-                    </v-row>
+                    <div class="ma-2">
+
+                        <v-row v-if="proc.recepcion">
+                            <v-col cols="4"><strong>Fecha de recepción:</strong> </v-col>
+                            <v-col cols="4">{{proc.recepcion}}</v-col>
+                             <v-col cols="4"> <v-chip small color="warning">{{proc.nom_input}}</v-chip></v-col>
+                        </v-row>
+                        <v-row v-if="proc.derivar">
+                            <v-col cols="4"><strong>Fecha de derivación:</strong></v-col>
+                            <v-col cols="4">{{proc.derivar}}</v-col>
+                             <v-col cols="4"><v-chip small color="green accent-3">{{proc.nom_ouput}}</v-chip></v-col>
+                        </v-row>
+                    </div>
+                    <v-card-actions>
+                        <v-btn small color="primary" @click="dialog=true">Derivar</v-btn>
+                    </v-card-actions>
                 </v-card>
-              
+              {{oficinas_fetch}}
             </v-card-text>
         </v-card>
+        <v-dialog
+        v-model="dialog"
+        max-width="600"
+        >
+            <v-card >
+                <v-toolbar color="primary" dark elevation="0">
+                    Derivar documento
+                </v-toolbar>
+                <v-card-text>
+                    <v-select 
+                    v-model="form.oficina"
+                    label="Elija la oficina"
+                    :items="oficinas"
+                    return-object
+                    item-text="nombre"
+                    item-value="id"
+                    >
+
+                    </v-select>
+                </v-card-text>
+                <v-card-actions>
+                    <v-btn color="primary" outlined @click="derivar()">Guardar</v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
     </div>
 </template>
 <script>
+import Form from 'vform'
+import axios from 'axios'
 export default {
     name:'accionesdoc',
     props:{
         dato:{default:[]}
+    },data(){
+        return{
+            dialog:false,
+            form: new Form({
+                oficina:'',
+                documento:''
+            }),
+            oficinas:[],       
+        }
+    },computed:{
+        oficinas_fetch(){
+            if(this.dialog==true){
+                this.fetch_oficinas();
+            }
+            
+        }
+    },
+    methods:{
+        fetch_oficinas(){
+            axios.get('/api/fetch-oficinas').then(response=>{
+                this.oficinas=response.data
+            })
+        },
+        derivar(){
+            this.form.documento=this.dato.id;
+            this.form.post('/api/derivar-doc').then(response=>{
+                this.dialog=true
+            }).catch(error=>{
+                console.log(error.response.data.message)
+            })
+        }
     }
 }
 </script>

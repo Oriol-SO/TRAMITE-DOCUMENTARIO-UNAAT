@@ -9,6 +9,7 @@ use App\Http\Controllers\Auth\UserController;
 use App\Http\Controllers\Auth\VerificationController;
 use App\Http\Controllers\DocumentoController;
 use App\Http\Controllers\EvaluadorController;
+use App\Http\Controllers\OficinaController;
 use App\Http\Controllers\Settings\PasswordController;
 use App\Http\Controllers\Settings\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -50,3 +51,7 @@ Route::group(['middleware' => 'guest:api'], function () {
 Route::get('meza-documentos',[DocumentoController::class, 'documentos']);
 Route::post('add-documento',[DocumentoController::class,'add_documento']);
 Route::get('datos_doc_meza/{id}',[DocumentoController::class,'dato_doc']);
+
+Route::post('derivar-doc',[DocumentoController::class,'derrivar_doc']);
+
+Route::get('fetch-oficinas',[OficinaController::class,'fetch_oficinas']);
