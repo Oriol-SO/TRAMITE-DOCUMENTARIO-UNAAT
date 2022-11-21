@@ -7,6 +7,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\UserController;
 use App\Http\Controllers\Auth\VerificationController;
+use App\Http\Controllers\DocumentoController;
 use App\Http\Controllers\EvaluadorController;
 use App\Http\Controllers\Settings\PasswordController;
 use App\Http\Controllers\Settings\ProfileController;
@@ -46,4 +47,6 @@ Route::group(['middleware' => 'guest:api'], function () {
     Route::get('oauth/{driver}/callback', [OAuthController::class, 'handleCallback'])->name('oauth.callback');
 });
 
-Route::get('evaluadores_lista',[EvaluadorController::class, 'listar_evaluador']);
+Route::get('meza-documentos',[DocumentoController::class, 'documentos']);
+Route::post('add-documento',[DocumentoController::class,'add_documento']);
+Route::get('datos_doc_meza/{id}',[DocumentoController::class,'dato_doc']);

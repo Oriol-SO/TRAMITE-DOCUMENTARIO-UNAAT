@@ -16,7 +16,7 @@ class oficinaSeeder extends Seeder
         DB::table('oficinas')->insert([
             [
             'id' => 1,
-            'nombre' => 'Gestion Acádemica',
+            'nombre' => 'Meza de partes',
             ],
             [
             'id' => 2,

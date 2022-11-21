@@ -17,9 +17,13 @@ class CreateDocumentosTable extends Migration
             $table->id();
             $table->string('documento');
             $table->date('fecha');
-            $table->bigInteger('user_id')->unsigned();
-            $table->bigInteger('oficina_id');
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->string('path')->nullable();
+            $table->string('remitente');   
+            $table->string('dni');
+            $table->string('destino');
+            $table->string('tipo');
+            //$table->bigInteger('oficina_id');
+            //$table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();
         });
     }

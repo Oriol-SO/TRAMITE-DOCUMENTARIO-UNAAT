@@ -38,6 +38,7 @@ export default [
     children: [
       { path: '', redirect: { name: 'dash.meza' } },
       { path: 'dashboard', name: 'dash.meza', component: page('meza/dashboard.vue') },
+      { path: 'documento/:id', name: 'dash.documento', component: page('meza/documento.vue') },
     ]
   },
   {

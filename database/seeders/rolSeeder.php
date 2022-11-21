@@ -30,7 +30,7 @@ class rolSeeder extends Seeder
             'id' => 3,
             'nombre' => 'Unidad orgánica',
             'estado' => 1,
-            'oficina_id'=>1,
+            'oficina_id'=>2,
             ],
             
             

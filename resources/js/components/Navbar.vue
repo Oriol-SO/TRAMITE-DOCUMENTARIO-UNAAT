@@ -1,7 +1,7 @@
 <template>
-<v-app-bar app :color="bgNavbar" elevation="0">
+<v-app-bar app style="background:rgb(13 129 219)" elevation="0">
 
-    <v-toolbar dense elevation="0" style="    background-color: transparent;  color:#fff;">
+    <v-toolbar dense elevation="0" style="background-color: transparent;  color:#fff;">
      <!--v-img class="ml-10 mr-5" max-height="38" max-width="88" src="/img/cbmediclogo.png" /-->
       <v-toolbar-title >{{ appName }}</v-toolbar-title>
       <v-spacer></v-spacer>
@@ -65,7 +65,7 @@ export default {
     // { name: "Iniciar sesión", path: "/login", notUser: true },
     // { name: "Registrarme", path: "/registro", notUser: true },
     //],
-    bgNavbar: "rgb(13 129 225)",
+    bgNavbar: "rgb(13 129 219)",
     colorletra:'#fff',
     rounded:false,
     letra_color:'#fff'
@@ -76,7 +76,7 @@ export default {
       user: "auth/user",
     }),
     linksVerified: function () {
-      return [{ name: "Inicio", path: "/home" }];
+      return [{ name: "Inicio", path: "/login" }];
       //return this.links.filter((link) => !(link.notUser && this.user));
     },
 

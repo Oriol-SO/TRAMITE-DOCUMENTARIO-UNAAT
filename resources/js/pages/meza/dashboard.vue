@@ -1,4 +1,5 @@
 <template >
+<div>
     <v-card class="mx-2 mt-3">
         <v-card-title>
             {{hola}}
@@ -13,14 +14,106 @@
                 single-line
                 hide-details
             ></v-text-field>
+            <v-spacer></v-spacer>
+            <v-btn color="primary"  class="text-capitalize" @click="dialog=true" >Agregar</v-btn>
             </v-card-title>
             <v-data-table
             :headers="headers"
             :items="documentos"
             :search="search"
-            ></v-data-table>
+            >
+            <template v-slot:[`item.action`]="{ item }">
+                <v-btn
+                small
+                rounded
+                color="deep-purple accent-2"
+                elevation="0"
+                style="color:#fff;"
+                class="text-capitalize"
+                @click=" $router.push({ path: `/meza-de-partes/documento/${item.id}`, }) "  
+                >Ver</v-btn>
+            </template>
+            
+            </v-data-table>
         </v-card>
     </v-card>
+
+    <v-dialog
+        v-model="dialog"
+        max-width="700"
+    >   
+        <v-card elevation="0">
+            <v-toolbar color="#FB8C00" dark elevation="0">
+                Registrar nuevo documento
+            </v-toolbar>
+            <v-card-text>
+                <v-card elevation="0">
+                 
+                    <v-col cols="12">
+                        <v-text-field
+                        v-model="form.nombre"
+                        label="Nombre del documento"
+                        >
+                        </v-text-field>
+                    </v-col>  
+               
+                    <v-row>
+                        <v-col cols="8">
+                        <v-text-field
+                         v-model="form.remitente"
+                        label="Remitente"
+                        >
+                        </v-text-field>
+                        </v-col>
+                        <v-col cols="4">
+                            <v-text-field
+                            v-model="form.dni"
+                            label="DNI"
+                            >
+                            </v-text-field>
+                        </v-col>
+                    </v-row>
+                    <v-row>
+                        <v-col cols="8">
+                            <v-text-field
+                            v-model="form.destino"
+                            label="Dirigido a"
+                            >
+
+                            </v-text-field>
+                        </v-col>
+                        <v-col cols="4">
+                            <v-select
+                            :items="tipos"
+                            v-model="form.tipo"
+                            label="Tipo"
+                            ></v-select>
+                        </v-col>
+                    </v-row>  
+                    <v-col cols="12">
+                        <v-file-input
+                        v-model="form.archivo"
+                        label="Seleccionar archivo"
+                        ></v-file-input>
+                    </v-col>
+                    
+                </v-card>
+            </v-card-text>
+            <v-card-actions>
+                <v-btn color="green accent-3" dark
+                @click="add_doc()"
+                >
+                    Guardar
+                </v-btn>
+                <v-btn color="error" dark text
+                @click="form.reset()"
+                >
+                    Limpiar
+                </v-btn>
+            </v-card-actions>
+        </v-card>
+    </v-dialog>
+</div>
 </template>
 <script>
 import axios from 'axios';
@@ -33,13 +126,53 @@ export default {
         headers: [
           { text: 'Codigo',align: 'start', value: 'id' },
           { text: 'Documento',align: 'start', value: 'documento' },
-          { text: 'fecha', value: 'fecha' },
-          { text: 'Responsable', value: 'user' },
+          { text: 'Fecha', value: 'fecha' },
+          { text: 'Responsable', value: 'remitente' },
+          { text: 'DNI', value: 'dni' },
+          { text: 'Destino', value: 'destino' },
+          { text: 'Tipo', value: 'tipo' },
+          { text: '', value: 'action' },
          
         ],
+        form: new Form({
+            remitente:'',
+            dni:'',
+            archivo:[],
+            nombre:'',
+            tipo:'',
+            destino:'',
+        }),
+        tipos:[
+            'INFORME',
+            'SOLICITUD',
+            'OTRO',
+        ],
         documentos:[],
+        dialog:false,
     }
-   }
+   },
+    mounted(){
+        this.fetch_docs()
+    },
+    methods:{
+        fetch_docs(){
+            axios.get('/api/meza-documentos').then(response=>{
+                this.documentos=response.data
+            }).catch(error=>{
+                console.log(error.response.data.message)
+            })
+        },
+        add_doc(){
+            this.form.post('/api/add-documento').then(response=>{
+                this.form.reset()
+                this.dialog=false;
+                this.fetch_docs()
+            }).catch(error=>{
+                console.log(error.response.data.message)
+            })
+        }
+    }
+   
 }
 </script>
 <style>
