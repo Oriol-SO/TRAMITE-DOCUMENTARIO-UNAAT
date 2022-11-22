@@ -14,6 +14,9 @@ class Proceso extends Model
         'oficina_input',
         'oficina_ouput',
         'documento_id',
-
+        'observacion',
+        'estado_der',
+        'estado_rep',
+        'recibido',
     ];
 }

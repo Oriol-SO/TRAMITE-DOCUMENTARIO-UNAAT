@@ -2,12 +2,11 @@
     <div>
         <v-card  class="ma-3">
             <v-card-title>
-               Seguimiento de tramite
+               Seguimiento de tramite       
             </v-card-title>
             <v-card-text>
-                <v-card v-for="(proc,i) in dato.proceso" :key="i">
+                <v-card v-for="(proc,i) in dato.proceso" :key="i" class="mt-4">
                     <div class="ma-2">
-
                         <v-row v-if="proc.recepcion">
                             <v-col cols="4"><strong>Fecha de recepción:</strong> </v-col>
                             <v-col cols="4">{{proc.recepcion}}</v-col>
@@ -20,7 +19,10 @@
                         </v-row>
                     </div>
                     <v-card-actions>
-                        <v-btn small color="primary" @click="dialog=true">Derivar</v-btn>
+                        <v-btn v-if="proc.ac_rep" small color="green accent-3" @click="recepcionar_doc(proc)">
+                            Recepcionar
+                        </v-btn>
+                        <v-btn v-if="proc.ac_derivar" small color="primary" @click="dialog=true ,add_proc(proc.id)">Derivar</v-btn>
                     </v-card-actions>
                 </v-card>
               {{oficinas_fetch}}
@@ -65,9 +67,16 @@ export default {
             dialog:false,
             form: new Form({
                 oficina:'',
-                documento:''
+                documento:'',
+                proceso:'',
+            }),
+
+            form2:new Form({
+                documento:'',
+                proceso:'',
             }),
             oficinas:[],       
+            //proc:'',
         }
     },computed:{
         oficinas_fetch(){
@@ -86,11 +95,30 @@ export default {
         derivar(){
             this.form.documento=this.dato.id;
             this.form.post('/api/derivar-doc').then(response=>{
-                this.dialog=true
+                this.dialog=false;
+                this.$emit('refresh',true) 
+                this.form.reset()
             }).catch(error=>{
                 console.log(error.response.data.message)
             })
-        }
+        },
+        add_proc(id){
+            this.form.proceso=id;
+        },
+        recepcionar_doc(doc){
+            this.form2.documento=doc.documento;
+            this.form2.proceso=doc.id;
+            if(!confirm('¿Estas seguro de realizar esta accion?')){
+                return
+            }
+            this.form2.post('/api/recepcionar-doc').then(response=>{
+                this.$emit('refresh',true)
+            }).catch(error=>{
+                console.log(error.response.data.message);
+            })
+
+        },
+
     }
 }
 </script>

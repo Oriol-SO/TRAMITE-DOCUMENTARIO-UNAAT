@@ -16,6 +16,8 @@ class documento extends Model
         'destino',
         'tipo',
         'oficina_id',
+        'estado',
+        'prioridad',
         'path',
     ];
 }

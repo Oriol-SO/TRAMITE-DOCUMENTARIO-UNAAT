@@ -22,7 +22,9 @@ class CreateDocumentosTable extends Migration
             $table->string('dni');
             $table->string('destino');
             $table->string('tipo');
-            //$table->bigInteger('oficina_id');
+            $table->string('estado')->nullable();
+            $table->string('prioridad')->nullable();
+            $table->bigInteger('oficina_id')->nullable();
             //$table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();
         });

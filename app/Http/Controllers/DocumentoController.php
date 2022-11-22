@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\documento;
 use App\Models\oficina;
 use App\Models\Proceso;
+use App\Models\role;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
@@ -13,6 +14,14 @@ use Illuminate\Support\Facades\Storage;
 class DocumentoController extends Controller
 {
 
+    private $oficina;
+    public function __construct(Request $request)
+    {
+        $this->middleware('auth');
+        $user=$request->user();
+        $role=role::findOrFail($user->rol_id);
+        $this->oficina=$role->oficina_id;
+    }
 
     public function documentos(){
         return documento::all();
@@ -26,6 +35,7 @@ class DocumentoController extends Controller
             'archivo'=>'required',
             'destino'=>'required',
             'tipo'=>'required',
+            'prioridad'=>'required',
         ]);
         try{
             $direccion='documentos';
@@ -39,12 +49,17 @@ class DocumentoController extends Controller
                 'destino'=>$request->destino,
                 'path'=>$url,
                 'tipo'=>$request->tipo,
-               // 'oficina_id'=>1,
+                'estado'=>'pendiente',
+                'prioridad'=>$request->prioridad,
+                'oficina_id'=>1,
             ]);
             Proceso::create([
                 'recepcion'=>Carbon::now(),
                 'documento_id'=>$doc->id,
-                'oficina_input'=>1,         
+                'oficina_input'=>1,     
+                'estado_der'=>0,  
+                'estado_rep'=>1,  
+                'recibido'=>0,
             ]);
 
             return true;
@@ -67,17 +82,29 @@ class DocumentoController extends Controller
                 'dni'=>$d->dni,
                 'destino'=>$d->destino,
                 'tipo'=>$d->tipo,
-                'proceso'=>Proceso::where('documento_id',$d->id)->get()->map(function($p){
+                'proceso'=>Proceso::where('documento_id',$d->id)->get()->map(function($p) use(&$d){
                     $oficina_i=oficina::where('id',$p->oficina_input)->first();
                     $oficina_o=oficina::where('id',$p->oficina_ouput)->first();
+                   // $documento=documento::findOrFail($d)
+                    $der=false;
+                    $rep=false;
+                    if($this->oficina==$p->oficina_input && $p->oficina_ouput==null){
+                        $der=true;
+                    }
+                    if($this->oficina==$p->oficina_ouput  &&$p->recibido==0 && $d->oficina_id==$this->oficina){
+                        $rep=true;
+                    }
                     return[
                         'id'=>$p->id,
+                        'documento'=>$p->documento_id,
                         'recepcion'=>$p->recepcion,
                         'derivar'=>$p->derivar,
                         'oficina_input'=>$p->oficina_input,
                         'oficina_ouput'=>$p->oficina_ouput,
                         'nom_input'=>$oficina_i?$oficina_i->nombre:null,
                         'nom_ouput'=>$oficina_o?$oficina_o->nombre:null,
+                        'ac_derivar'=>$der,
+                        'ac_rep'=>$rep,
                     ];
                 }),
             ];
@@ -91,9 +118,36 @@ class DocumentoController extends Controller
         $request->validate([
             'oficina'=>'required',
             'documento'=>'required',
+            'proceso'=>'required|numeric',
         ]);
+        $documento=documento::findOrFail($request->documento);
+        $oficina=oficina::findOrFail($request->oficina['id']);
+        $proceso=Proceso::findOrFail($request->proceso);
+        try{
+            //verificamos que el proceso no tenga derivacion
+            if($proceso->oficina_ouput!=null || $proceso->oficina_ouput!=''){
+                return response()->json(['message'=>'El proceso ya fué derivado'],405);
+            }
+            if($proceso->oficina_input==$oficina->id){
+                return response()->json(['message'=>'No puedes derivar a la misma oficina'],405);
+            }
 
-        return $request;
+            // ahora si derivamos a la oficina
+            Proceso::where('id',$proceso->id)->update(['derivar'=>Carbon::now(),'oficina_ouput'=>$oficina->id,'estado_der'=>1]);
+            documento::where('id',$documento->id)->update(['oficina_id'=>$oficina->id]);
+            //ahora creamos un nuevo registro 
+            /*Proceso::create([
+                'recepcion'=>Carbon::now(),
+                'documento_id'=>$documento->id,
+                'oficina_input'=>$oficina->id,   
+            ]);*/
+            return 'derivado';
+        }catch(Exception $e){
+            //return $e;
+            return response()->json(['message'=>'Error al derivar'],405);
+        }
+        
+        
     }
 }
 

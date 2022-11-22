@@ -38,7 +38,7 @@ export default [
     children: [
       { path: '', redirect: { name: 'dash.meza' } },
       { path: 'dashboard', name: 'dash.meza', component: page('meza/dashboard.vue') },
-      { path: 'documento/:id', name: 'dash.documento', component: page('meza/documento.vue') },
+      { path: 'documento/:id', name: 'meza.doc', component: page('meza/documento.vue') },
     ]
   },
   {
@@ -47,6 +47,7 @@ export default [
     children: [
       { path: '', redirect: { name: 'dash.unidad' } },
       { path: 'dashboard', name: 'dash.unidad', component: page('unidad/dashboard.vue') },
+      { path: 'documento/:id', name: 'unidad.doc', component: page('unidad/documento.vue') },
     ]
   },
 

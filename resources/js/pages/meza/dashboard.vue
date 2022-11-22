@@ -52,7 +52,7 @@
                     <v-col cols="12">
                         <v-text-field
                         v-model="form.nombre"
-                        label="Nombre del documento"
+                        label="Asunto"
                         >
                         </v-text-field>
                     </v-col>  
@@ -61,32 +61,39 @@
                         <v-col cols="8">
                         <v-text-field
                          v-model="form.remitente"
-                        label="Remitente"
+                        label="Interesado"
                         >
                         </v-text-field>
                         </v-col>
                         <v-col cols="4">
                             <v-text-field
                             v-model="form.dni"
-                            label="DNI"
+                            label="DNI interesado"
                             >
                             </v-text-field>
                         </v-col>
                     </v-row>
                     <v-row>
-                        <v-col cols="8">
+                        <v-col cols="6">
                             <v-text-field
                             v-model="form.destino"
-                            label="Dirigido a"
+                            label="Destinatario"
                             >
 
                             </v-text-field>
                         </v-col>
-                        <v-col cols="4">
+                        <v-col cols="3">
                             <v-select
                             :items="tipos"
                             v-model="form.tipo"
                             label="Tipo"
+                            ></v-select>
+                        </v-col>
+                        <v-col cols="3">
+                            <v-select
+                            :items="prioridades"
+                            v-model="form.prioridad"
+                            label="Prioridad"
                             ></v-select>
                         </v-col>
                     </v-row>  
@@ -141,11 +148,17 @@ export default {
             nombre:'',
             tipo:'',
             destino:'',
+            prioridad:'',
         }),
         tipos:[
             'INFORME',
             'SOLICITUD',
             'OTRO',
+        ],
+        prioridades:[
+            'NORMAL',
+            'ESPECIAL',
+            'URGENTE',
         ],
         documentos:[],
         dialog:false,
@@ -166,7 +179,8 @@ export default {
             this.form.post('/api/add-documento').then(response=>{
                 this.form.reset()
                 this.dialog=false;
-                this.fetch_docs()
+                this.fetch_docs();
+                
             }).catch(error=>{
                 console.log(error.response.data.message)
             })

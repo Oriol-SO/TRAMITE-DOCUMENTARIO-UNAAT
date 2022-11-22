@@ -7,7 +7,7 @@
 
        <v-card>
             <v-card-title>
-                <v-toolbar elevation="0" >Lista de documentos </v-toolbar>
+                <v-toolbar elevation="0" >Historial </v-toolbar>
             <v-text-field
                 v-model="search"
                 append-icon="mdi-magnify"

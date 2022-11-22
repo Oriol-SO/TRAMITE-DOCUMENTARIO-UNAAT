@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\oficina;
+use App\Models\role;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -12,6 +14,16 @@ class UserController extends Controller
      */
     public function current(Request $request)
     {
-        return response()->json($request->user());
+        $user=$request->user();
+        $rol=role::where('id',$user->rol_id)->first();
+        $oficina=oficina::where('id',$rol?$rol->oficina_id:0)->first();
+        return response()->json([
+            'id'=>$user->id,
+            'email'=>$user->email,
+            'name'=>$user->name,
+            'rol_id'=>$user->rol_id,
+            'oficina_id'=>$oficina?$oficina->id:null,
+            'oficina'=>$oficina?$oficina->nombre:null,
+        ]);
     }
 }

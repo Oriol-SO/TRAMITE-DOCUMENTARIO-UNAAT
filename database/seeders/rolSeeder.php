@@ -24,7 +24,7 @@ class rolSeeder extends Seeder
             'id' => 2,
             'nombre' => 'Meza de partes',
             'estado' => 1,
-            'oficina_id'=>null,
+            'oficina_id'=>1,
             ],
             [
             'id' => 3,

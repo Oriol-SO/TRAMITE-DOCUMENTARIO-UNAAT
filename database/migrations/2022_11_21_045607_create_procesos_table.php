@@ -15,11 +15,15 @@ class CreateProcesosTable extends Migration
     {
         Schema::create('procesos', function (Blueprint $table) {
             $table->id();
-            $table->date('recepcion')->nullable();
-            $table->date('derivar')->nullable();
+            $table->dateTime('recepcion')->nullable();
+            $table->dateTime('derivar')->nullable();
             $table->bigInteger('oficina_input')->nullable();
             $table->bigInteger('oficina_ouput')->nullable();
             $table->bigInteger('documento_id')->unsigned();
+            $table->boolean('recibido')->nullable();
+            $table->string('observacion')->nullable();
+            $table->boolean('estado_der')->nullable();
+            $table->boolean('estado_rep')->nullable();
             $table->foreign('documento_id')->references('id')->on('documentos');
             $table->timestamps();
         });

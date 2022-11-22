@@ -12,6 +12,7 @@ use App\Http\Controllers\EvaluadorController;
 use App\Http\Controllers\OficinaController;
 use App\Http\Controllers\Settings\PasswordController;
 use App\Http\Controllers\Settings\ProfileController;
+use App\Http\Controllers\UnidadController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -55,3 +56,8 @@ Route::get('datos_doc_meza/{id}',[DocumentoController::class,'dato_doc']);
 Route::post('derivar-doc',[DocumentoController::class,'derrivar_doc']);
 
 Route::get('fetch-oficinas',[OficinaController::class,'fetch_oficinas']);
+
+//unidad organida
+
+Route::get('unidad-documentos/{id}',[UnidadController::class,'fetch_docs']);
+Route::post('recepcionar-doc',[UnidadController::class,'recepcionar_doc']);
