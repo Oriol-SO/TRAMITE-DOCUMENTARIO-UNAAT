@@ -15,6 +15,10 @@ class oficinaSeeder extends Seeder
     {
         DB::table('oficinas')->insert([
             [
+            'id' => 9,
+            'nombre' => 'Administrador del sistema',
+            ],
+            [
             'id' => 1,
             'nombre' => 'Meza de partes',
             ],

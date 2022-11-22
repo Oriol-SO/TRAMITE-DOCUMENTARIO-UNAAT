@@ -15,8 +15,8 @@ class UserController extends Controller
     public function current(Request $request)
     {
         $user=$request->user();
-        $rol=role::where('id',$user->rol_id)->first();
-        $oficina=oficina::where('id',$rol?$rol->oficina_id:0)->first();
+        //$rol=role::where('id',$user->rol_id)->first();
+        $oficina=oficina::where('id',$user->oficina_id)->first();
         return response()->json([
             'id'=>$user->id,
             'email'=>$user->email,

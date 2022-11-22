@@ -2,7 +2,8 @@
     <div>
         <v-card  class="ma-3">
             <v-card-title>
-               Seguimiento de tramite       
+               Seguimiento de tramite   
+               <v-btn color="primary" class="text-capitalize" @click="dialogdoc=true">Cambiar documento</v-btn>    
             </v-card-title>
             <v-card-text>
                 <v-card v-for="(proc,i) in dato.proceso" :key="i" class="mt-4">
@@ -53,6 +54,26 @@
                 </v-card-actions>
             </v-card>
         </v-dialog>
+        <v-dialog
+        v-model="dialogdoc"
+        max-width="600"
+        >
+            <v-card >
+                <v-toolbar color="warning" dark elevation="0">
+                  Cambiar documento
+                </v-toolbar>
+                <v-card-text>
+                   <v-file-input
+                    v-model="formdoc.archivo"
+                    label="Seleccione un nuevo documento"
+                    ></v-file-input>
+                </v-card-text>
+                <v-card-actions>
+                    <v-btn color="warning" dark @click="actualizar_doc()">Actualizar</v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
+
     </div>
 </template>
 <script>
@@ -65,6 +86,7 @@ export default {
     },data(){
         return{
             dialog:false,
+            dialogdoc:false,
             form: new Form({
                 oficina:'',
                 documento:'',
@@ -75,7 +97,12 @@ export default {
                 documento:'',
                 proceso:'',
             }),
-            oficinas:[],       
+            oficinas:[],  
+            
+            formdoc:new Form({
+                documento:'',
+                archivo:[],
+            })
             //proc:'',
         }
     },computed:{
@@ -118,6 +145,14 @@ export default {
             })
 
         },
+        actualizar_doc(){
+            this.formdoc.documento=this.dato.id;
+            this.formdoc.post('/api/actualizar-doc/'+this.dato.id).then(response=>{
+                this.dialogdoc=false;
+                this.$emit('refresh',true) 
+                this.formdoc.reset()
+            })
+        }
 
     }
 }

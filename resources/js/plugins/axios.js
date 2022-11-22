@@ -43,6 +43,26 @@ axios.interceptors.response.use(response => response, error => {
   if (status >= 500) {
     serverError(error.response)
   }
+  if(status==405){
+    Swal.fire({
+      icon: 'error',
+      html: "<span style=\""+"font-family:'Roboto'\">"+error.response.data.message+"</span>",
+
+    })
+  }
+  if(status==422){
+    Swal.fire({
+      icon: 'error',
+      html: "<span style=\""+"font-family:'Roboto'\""+">Errores de validacion</span>",
+    })
+    
+  }
+  if(status==404){
+    Swal.fire({
+      icon: 'error',
+      html: "<span style=\""+"font-family:'Roboto'\""+">Error al encontrar datos</span>",
+    })
+  }
 
   return Promise.reject(error)
 })

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\OAuthController;
@@ -61,3 +62,12 @@ Route::get('fetch-oficinas',[OficinaController::class,'fetch_oficinas']);
 
 Route::get('unidad-documentos/{id}',[UnidadController::class,'fetch_docs']);
 Route::post('recepcionar-doc',[UnidadController::class,'recepcionar_doc']);
+
+Route::post('actualizar-doc/{id}',[UnidadController::class,'cambiar_doc']);
+//administrado
+
+Route::get('get-users',[AdminController::class,'getusers']);
+Route::get('get-roles',[AdminController::class,'roles']);
+Route::get('get-oficinas',[AdminController::class,'oficinas']);
+Route::post('add-user',[AdminController::class,'add_user']);
+Route::post('edit-user/{id}',[AdminController::class,'editar_user']);

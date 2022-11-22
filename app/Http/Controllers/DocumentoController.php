@@ -19,8 +19,8 @@ class DocumentoController extends Controller
     {
         $this->middleware('auth');
         $user=$request->user();
-        $role=role::findOrFail($user->rol_id);
-        $this->oficina=$role->oficina_id;
+       // $role=role::findOrFail($user->rol_id);
+        $this->oficina=$user->oficina_id;
     }
 
     public function documentos(){

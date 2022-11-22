@@ -9,6 +9,7 @@ use App\Models\role;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class UnidadController extends Controller
 {
@@ -17,8 +18,8 @@ class UnidadController extends Controller
     {
         $this->middleware('auth');
         $user=$request->user();
-        $role=role::findOrFail($user->rol_id);
-        $this->oficina=$role->oficina_id;
+       // $role=role::findOrFail($user->rol_id);
+        $this->oficina=$user->oficina_id;
     }
 
     public function fetch_docs($id){
@@ -68,6 +69,35 @@ class UnidadController extends Controller
 
         }catch(Exception $e){
             return response()->json(['messager'=>'Error al recepcionar documento'],405);
+        }
+    }
+    public function cambiar_doc(Request $request,$id){
+        $request->validate([
+            'documento'=>'required|numeric',
+            'archivo'=>'required'
+        ]);
+        $documento=documento::findOrFail($id);
+        try{
+
+            if($documento->id!=$request->id){
+                return response()->json(['message'=>'los documentos no coinciden'],405);
+            }
+            if($documento->oficina_id!=$this->oficina){
+                return response()->json(['message'=>'No puedes cambiar el documento'],405);
+            }
+            //subimos el documento
+            $direccion='documentos';
+            $newurl=Storage::url($request->file('archivo')->store($direccion,'public_file'));
+            //eliminamos el anterior documento
+            $path = public_path().$documento->path;
+            unlink($path);
+
+            $documento->path=$newurl;
+            $documento->save();
+            return 'cambiado';
+
+        }catch(Exception $e){
+            return response()->json(['message'=>'Error al cambiar documento'],405);
         }
     }
 }

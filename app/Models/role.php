@@ -13,6 +13,5 @@ class role extends Model
         'email',
         'nombre',
         'estado',
-        'oficina_id',
     ];
 }
