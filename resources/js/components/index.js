@@ -4,6 +4,7 @@ import { HasError, AlertError, AlertSuccess } from 'vform/components/bootstrap5'
 import datosdoc from '~/components/datosdoc.vue';
 import verdoc from '~/components/verdocumento.vue';
 import accionesdoc from '~/components/accionesdoc.vue';
+import sidevar from '~/components/sidevar.vue';
 
 // Components that are registered globaly.
 [
@@ -13,7 +14,8 @@ import accionesdoc from '~/components/accionesdoc.vue';
   AlertSuccess,
   datosdoc,
   verdoc,
-  accionesdoc
+  accionesdoc,
+  sidevar
 ].forEach(Component => {
   Vue.component(Component.name, Component)
 })

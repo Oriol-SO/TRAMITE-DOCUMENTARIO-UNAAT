@@ -22,8 +22,15 @@ class CreateDocumentosTable extends Migration
             $table->string('dni');
             $table->string('destino');
             $table->string('tipo');
-            $table->string('estado')->nullable();
-            $table->string('prioridad')->nullable();
+            $table->string('numero_doc')->nullable();
+            $table->string('tipo_doc')->nullable(); //interno o externo
+            $table->string('direccion')->nullable();
+            $table->string('referencia')->nullable();
+            $table->string('anexo')->nullable();
+            $table->string('folio')->nullable();
+            $table->boolean('estado')->nullable();
+            $table->date('fecha_fin')->nullable();
+            $table->integer('prioridad')->nullable();
             $table->bigInteger('oficina_id')->nullable();
             //$table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();

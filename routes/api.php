@@ -58,12 +58,15 @@ Route::post('derivar-doc',[DocumentoController::class,'derrivar_doc']);
 
 Route::get('fetch-oficinas',[OficinaController::class,'fetch_oficinas']);
 
+Route::post('agregar-tiempo-busqueda/{id}',[DocumentoController::class,'agregar_tiempo_doc']);
 //unidad organida
 
 Route::get('unidad-documentos/{id}',[UnidadController::class,'fetch_docs']);
 Route::post('recepcionar-doc',[UnidadController::class,'recepcionar_doc']);
 
 Route::post('actualizar-doc/{id}',[UnidadController::class,'cambiar_doc']);
+
+Route::post('archivar-doc',[UnidadController::class,'archivar_doc']);
 //administrado
 
 Route::get('get-users',[AdminController::class,'getusers']);
@@ -71,3 +74,9 @@ Route::get('get-roles',[AdminController::class,'roles']);
 Route::get('get-oficinas',[AdminController::class,'oficinas']);
 Route::post('add-user',[AdminController::class,'add_user']);
 Route::post('edit-user/{id}',[AdminController::class,'editar_user']);
+
+Route::get('get-documentos-rep',[AdminController::class,'documentos_rep']);
+Route::post('buscar-fechas',[AdminController::class,'buscar_fechas']);
+Route::post('add-oficina',[AdminController::class,'add_oficina']);
+
+Route::post('exportar-excel',[AdminController::class,'exportar_docs']);

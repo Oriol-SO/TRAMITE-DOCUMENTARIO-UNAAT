@@ -1,5 +1,6 @@
 <template>
-<v-app-bar app style="background:rgb(13 129 219)" elevation="0">
+<div>
+  <v-app-bar app style="background:rgb(13 129 219)" elevation="0">
 
     <v-toolbar dense elevation="0" style="background-color: transparent;  color:#fff;">
      <!--v-img class="ml-10 mr-5" max-height="38" max-width="88" src="/img/cbmediclogo.png" /-->
@@ -52,6 +53,8 @@
     </v-toolbar>
 
   </v-app-bar>
+
+</div>
 </template>
 
 <script>
@@ -60,6 +63,7 @@ import { mapGetters } from "vuex";
 export default {
   data: () => ({
     appName: window.config.appName,
+
     // links: [
     //   { name: "Inicio", path: "/home", notUser: false },
     // { name: "Iniciar sesión", path: "/login", notUser: true },

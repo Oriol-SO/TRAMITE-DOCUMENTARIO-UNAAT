@@ -16,7 +16,7 @@ class oficinaSeeder extends Seeder
         DB::table('oficinas')->insert([
             [
             'id' => 9,
-            'nombre' => 'Administrador del sistema',
+            'nombre' => 'Administracion',
             ],
             [
             'id' => 1,
@@ -24,11 +24,27 @@ class oficinaSeeder extends Seeder
             ],
             [
             'id' => 2,
-            'nombre' => 'Direccion general',
+            'nombre' => 'Oficina de Tecnologías de la Información',
             ],
             [
             'id' => 3,
-            'nombre' => 'Gerencia',
+            'nombre' => 'Dirección General de Administración',
+            ],
+            [
+            'id' => 4,
+            'nombre' => 'Secretaría General',
+            ],
+            [
+            'id' => 5,
+            'nombre' => 'Oficina de Planeamiento y Presupuesto',
+            ],
+            [
+            'id' => 6,
+            'nombre' => 'Oficina de Cooperación y Relaciones Internacionales',
+            ],
+            [
+            'id' =>7,
+            'nombre' => 'Oficina de Comunicación e Imagen Institucional',
             ],
             
         ]);

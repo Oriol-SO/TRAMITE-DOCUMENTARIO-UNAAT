@@ -27,12 +27,39 @@
                 <v-btn
                 small
                 rounded
+                outlined
                 color="deep-purple accent-2"
                 elevation="0"
                 style="color:#fff;"
                 class="text-capitalize"
                 @click=" $router.push({ path: `/unidad-organica/documento/${item.id}`, }) "  
-                >Ver</v-btn>
+                >Seguimiento</v-btn>
+            </template>
+
+            <template v-slot:[`item.prioridad`]="{ item }">
+                <v-chip
+                small
+                :color="color_pri(item)"
+                >
+                    {{nombre_pri(item)}}
+                </v-chip>
+            </template>
+            <template v-slot:[`item.estado`]="{ item }">
+                <v-chip
+                small
+                v-if="item.estado==1"
+                color="green accent-3"
+                >
+                Archivado
+                </v-chip>
+                <v-chip
+                small
+                v-else
+                color="warning"
+                >
+                Pendiente
+                </v-chip>
+
             </template>
             
             </v-data-table>
@@ -140,6 +167,8 @@ export default {
           { text: 'DNI', value: 'dni' },
           { text: 'Destino', value: 'destino' },
           { text: 'Tipo', value: 'tipo' },
+          { text: 'Prioridad', value: 'prioridad' },
+          { text: 'Estado', value: 'estado' },
           { text: '', value: 'action' },
          
         ],
@@ -161,6 +190,7 @@ export default {
             'NORMAL',
             'ESPECIAL',
             'URGENTE',
+            'MUY URGENTE'
         ],
         documentos:[],
         dialog:false,
@@ -173,9 +203,38 @@ export default {
     ...mapGetters({
         user: "auth/user",
         }),
+
+        
     },
     methods:{
-
+        color_pri(item){
+            switch(item.prioridad){
+                case 20:
+                    return 'error';
+                case 19:
+                    return 'warning';
+                case 18:
+                    return 'primary';
+                case 17:
+                    return 'green accent-2';
+                default:
+                    return '';
+            }
+        },
+        nombre_pri(item){
+            switch(item.prioridad){
+                case 20:
+                    return 'Normal';
+                case 19:
+                    return 'Especial';
+                case 18:
+                    return 'Urgente';
+                case 17:
+                    return 'Muy urgente';
+                default:
+                    return '';
+            }
+        },
         fetch_docs(){
             axios.get('/api/unidad-documentos/'+this.user.oficina_id).then(response=>{
                 this.documentos=response.data

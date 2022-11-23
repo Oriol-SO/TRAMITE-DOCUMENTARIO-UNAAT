@@ -33,6 +33,11 @@
                                 <div class="box-data"><strong>Fecha creación: </strong>   <div class="box-data-valor"><v-chip small color="warning"> {{dato.fecha}}</v-chip></div></div>
                             </v-list-item-subtitle>
                         </v-col>
+                        <v-col cols="12" class="py-0" sm="6" md="4">
+                            <v-list-item-subtitle>
+                                <div class="box-data"><strong>Tiempo creación: </strong>   <div class="box-data-valor"><v-chip small color="purple lighten-4"> {{dato.tiempo_creacion}}</v-chip></div></div>
+                            </v-list-item-subtitle>
+                        </v-col>
                         </v-row>
 
                     </div>

@@ -13,7 +13,7 @@
             <v-text-field
                 v-model="search"
                 append-icon="mdi-magnify"
-                label="Buscar Documento"
+                label="Buscar Usuario"
                 single-line
                 hide-details
             ></v-text-field>
@@ -106,7 +106,7 @@
                             <v-autocomplete
                             v-model="form.oficina"
                             :items="oficinas"
-                            label="Oficina"
+                            label="Organo/Unidad"
                             required
                             return-object
                             item-text="nombre"
@@ -187,6 +187,8 @@ export default {
         usuario:'',
         rol_user:'',
         rol_oficina:'',
+        oficinas:[],
+        roles:[],
     }
    },mounted(){
     this.fetch_users();

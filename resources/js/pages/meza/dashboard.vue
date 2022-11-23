@@ -13,9 +13,10 @@
                 label="Buscar Documento"
                 single-line
                 hide-details
+                @click="iniciar_tiempo_busqueda()"
             ></v-text-field>
             <v-spacer></v-spacer>
-            <v-btn color="primary"  class="text-capitalize" @click="dialog=true" >Agregar</v-btn>
+            <v-btn color="primary"  class="text-capitalize" @click="dialog=true,iniciar_tiempo()" >Agregar registro</v-btn>
             </v-card-title>
             <v-data-table
             :headers="headers"
@@ -30,8 +31,8 @@
                 elevation="0"
                 style="color:#fff;"
                 class="text-capitalize"
-                @click=" $router.push({ path: `/meza-de-partes/documento/${item.id}`, }) "  
-                >Ver</v-btn>
+                @click=" $router.push({ path: `/meza-de-partes/documento/${item.id}`, }) ,finalizar_tiempo_busqueda(item.id) "  
+                >Seguimiento</v-btn>
             </template>
             
             </v-data-table>
@@ -56,7 +57,55 @@
                         >
                         </v-text-field>
                     </v-col>  
-               
+                    <v-row>
+                        <v-col cols="6">
+                        <v-text-field
+                        v-model="form.numero_doc"
+                        label="Numero de documento Ejem:0001"
+                        >
+                        </v-text-field>
+                        </v-col>
+                        <v-col cols="6">
+                            <v-select
+                            v-model="form.tipo_doc"
+                            :items="['INTERNO','EXTERNO']"
+                            label="Tipo de documento"
+                            >
+                            </v-select>
+                        </v-col>
+                    </v-row>
+                    <v-row>
+                        <v-col cols="3">
+                        <v-text-field
+                        v-model="form.direccion"
+                        label="Direcciones"
+                        >
+                        </v-text-field>
+                        </v-col>
+                        <v-col cols="3">
+                        <v-text-field
+                        v-model="form.referencia"
+                        label="Referencias"
+                        >
+                        </v-text-field>
+                        </v-col>
+                        <v-col cols="3">
+                        <v-text-field
+                        v-model="form.anexo"
+                        label="Anexos"
+                        >
+                        </v-text-field>
+                        </v-col>
+                        <v-col cols="3">
+                        <v-text-field
+                        v-model="form.folio"
+                        label="Folios"
+                        >
+                        </v-text-field>
+                        </v-col>
+                       
+                    </v-row>
+                    
                     <v-row>
                         <v-col cols="8">
                         <v-text-field
@@ -142,26 +191,45 @@ export default {
          
         ],
         form: new Form({
-            remitente:'',
-            dni:'',
+            remitente:'Oriol Simon',
+            dni:'72852803',
             archivo:[],
-            nombre:'',
+            nombre:'Tramite documento primero',
             tipo:'',
-            destino:'',
+            destino:'DECANO',
             prioridad:'',
+            tipo_doc:'',
+            numero_doc:'0001',
+            direccion:'',
+            referencia:'',
+            anexo:'',
+            folio:'',
+
+            tiempo_inicio:'',
+            tiempo_fin:'',
         }),
         tipos:[
+            'RESOLUCION',
+            'MEMORANDO MULTIPLE',
             'INFORME',
-            'SOLICITUD',
-            'OTRO',
+            'INFORME TECNICO',
+            'INFORME LEGAL',
+            'CARTA',
+            'OFICIO',
+            'OFICIO MULTIPLE',
         ],
         prioridades:[
             'NORMAL',
             'ESPECIAL',
             'URGENTE',
+            'MUY URGENTE'
         ],
         documentos:[],
         dialog:false,
+        formtiempo: new Form({
+            inicio:'0',
+            fin:'0'
+        })
     }
    },
     mounted(){
@@ -176,6 +244,7 @@ export default {
             })
         },
         add_doc(){
+            this.finalizar_tiempo();
             this.form.post('/api/add-documento').then(response=>{
                 this.form.reset()
                 this.dialog=false;
@@ -184,11 +253,40 @@ export default {
             }).catch(error=>{
                 console.log(error.response.data.message)
             })
+        },
+        iniciar_tiempo(){
+            let tiempo=new Date();
+            this.form.tiempo_inicio=tiempo
+            console.log( tiempo.toLocaleString())
+        },
+        finalizar_tiempo(){
+            let tiempo=new Date();
+            this.form.tiempo_fin=tiempo
+            console.log( tiempo.toLocaleString())
+        },
+        iniciar_tiempo_busqueda(){
+            let tiempo=new Date();
+            this.formtiempo.inicio=tiempo
+            console.log( tiempo.toLocaleString())
+        },
+        finalizar_tiempo_busqueda(doc){
+            let tiempo=new Date();
+            this.formtiempo.fin=tiempo
+            console.log( tiempo.toLocaleString())
+            this.formtiempo.post('/api/agregar-tiempo-busqueda/'+doc).then(response=>{
+                return
+            })
         }
     }
    
 }
 </script>
+
+
+
+
+
+
 <style>
  #evaluador .v-data-table-header th[role=columnheader] {
   font-size: 16px !important;

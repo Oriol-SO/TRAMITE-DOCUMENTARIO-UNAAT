@@ -24,6 +24,7 @@
                             Recepcionar
                         </v-btn>
                         <v-btn v-if="proc.ac_derivar" small color="primary" @click="dialog=true ,add_proc(proc.id)">Derivar</v-btn>
+                        <v-btn v-if="proc.archivar" small color="green accent-3" @click="archivar(proc)">Archivar</v-btn>
                     </v-card-actions>
                 </v-card>
               {{oficinas_fetch}}
@@ -151,6 +152,18 @@ export default {
                 this.dialogdoc=false;
                 this.$emit('refresh',true) 
                 this.formdoc.reset()
+            })
+        },archivar(doc){
+            let form= new Form({
+                documento:doc.documento,
+            })
+            if(!confirm('¿Estas seguro de realizar esta accion?')){
+                return
+            }
+            form.post('/api/archivar-doc').then(response=>{
+                this.$emit('refresh',true)
+            }).catch(error=>{
+                console.log(error.response.data.message);
             })
         }
 

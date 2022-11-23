@@ -19,5 +19,12 @@ class documento extends Model
         'estado',
         'prioridad',
         'path',
+        'tipo_doc',
+        'numero_doc',
+        'direccion',
+        'referencia',
+        'anexo',
+        'folio',
+        'fecha_fin',
     ];
 }

@@ -27,7 +27,7 @@ class UnidadController extends Controller
         try{
             $docs_entrantes=Proceso::where('oficina_ouput',$oficina->id)->get('documento_id');
 
-            $documentos=documento::whereIn('id',$docs_entrantes)->get();
+            $documentos=documento::whereIn('id',$docs_entrantes)->orderBy('prioridad', 'asc')->get();
             return $documentos;
         }catch(Exception $e){
             response()->json(['message'=>'Error al obtener documentos'],405);
@@ -78,7 +78,6 @@ class UnidadController extends Controller
         ]);
         $documento=documento::findOrFail($id);
         try{
-
             if($documento->id!=$request->id){
                 return response()->json(['message'=>'los documentos no coinciden'],405);
             }
@@ -98,6 +97,26 @@ class UnidadController extends Controller
 
         }catch(Exception $e){
             return response()->json(['message'=>'Error al cambiar documento'],405);
+        }
+    }
+
+
+    public function archivar_doc(Request $request){
+        $request->validate([
+            'documento'=>'required|numeric'
+        ]);
+        $documento=documento::findOrFail($request->documento);
+        try{
+           if($documento->estado==1){
+            return response()->json(['message'=>'El documento ya finalizó'],405);
+           }
+           //actualizamos el documento
+           $documento->estado=1;
+           $documento->fecha_fin=Carbon::now();
+           $documento->save();
+           return true;
+        }catch(Exception $e){
+            return response()->json(['message'=>'Error al archivar']);
         }
     }
 }
