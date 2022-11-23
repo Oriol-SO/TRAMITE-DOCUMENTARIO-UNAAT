@@ -7,7 +7,14 @@
         elevation="2"
         width="380"
       >
-       
+      <div class="d-flex" >
+        <v-img
+        class="mx-auto"
+        max-height="100"
+        max-width="200"
+        src="/img/logo.jpeg"
+      ></v-img>
+      </div>
 
         <v-card-title class="d-block text-center"
           >Iniciar sesión</v-card-title
@@ -52,7 +59,7 @@
 
             <v-btn
               :loading="form.busy"
-              color="green accent-3"
+              color="primary"
               class="mr-4"
               type="submit"
               dark
