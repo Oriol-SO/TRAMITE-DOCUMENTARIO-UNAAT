@@ -194,6 +194,7 @@ export default {
           { text: 'DNI', value: 'dni' },
           { text: 'Destino', value: 'destino' },
           { text: 'Tipo', value: 'tipo' },
+           { text: 'Fecha final', value: 'fecha_fin' },
           { text: '', value: 'action' },
          
         ],
