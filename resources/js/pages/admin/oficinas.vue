@@ -111,7 +111,7 @@ export default {
    },methods:{
 
         fetch_oficinas(){
-            axios.get('/api/get-oficinas').then(response=>{
+            axios.get('/api/all-oficinas').then(response=>{
                 this.oficinas=response.data;
             })
         },
@@ -132,7 +132,9 @@ export default {
                 oficina:item.id
             });
 
-            form.p
+            form.post('/api/cambiar-estado-oficina').then(response=>{
+
+            })
         }
 
    }

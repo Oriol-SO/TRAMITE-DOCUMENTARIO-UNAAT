@@ -6,6 +6,7 @@ use App\Models\documento;
 use App\Models\oficina;
 use App\Models\Proceso;
 use App\Models\role;
+use App\Models\tiempo;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
@@ -27,12 +28,48 @@ class UnidadController extends Controller
         try{
             $docs_entrantes=Proceso::where('oficina_ouput',$oficina->id)->get('documento_id');
 
-            $documentos=documento::whereIn('id',$docs_entrantes)->orderBy('prioridad', 'asc')->get();
+            $documentos=documento::whereIn('id',$docs_entrantes)->orderBy('prioridad', 'asc')->get()->map(function($d){
+                    $proceso=Proceso::where('documento_id',$d->id)->orderBy('id', 'desc')->first();
+                    $der=false;
+                    $rep=false;
+                    $archi=false;
+                    if($d->estado==0 && $this->oficina==$proceso->oficina_input && $proceso->oficina_ouput==null){
+                        $der=true;
+                    }
+                    if($d->estado==0 && $this->oficina==$proceso->oficina_ouput  && $proceso->recibido==0 && $d->oficina_id==$this->oficina){
+                        $rep=true;
+                    }
+                    if($d->estado==0 && $this->oficina==$proceso->oficina_input && $proceso->oficina_ouput==null){
+                        $archi=true;
+                    }
+                    $antendido=true;
+                    if($der==true || $rep ==true ){
+                        $antendido=false;
+                    }
+                    if($archi==true){
+                        $antendido=false;
+                    }
+                    return[
+                        'id'=>$d->id,
+                        'documento'=>$d->documento,
+                        'fecha'=>$d->fecha,
+                        'path'=>$d->path,
+                        'prioridad'=>$d->prioridad,
+                        'remitente'=>$d->remitente,
+                        'dni'=>$d->dni,
+                        'estado'=>$d->estado,
+                        'destino'=>$d->destino,
+                        'tipo'=>$d->tipo,
+                        'tiempo_final'=>$d->fecha_fin,
+                        'atendido'=>$antendido,    
+                    ];
+            });
+            
             return $documentos;
         }catch(Exception $e){
             response()->json(['message'=>'Error al obtener documentos'],405);
         }
-        return documento::all();
+       // return documento::all();
     }
 
     public function recepcionar_doc(Request $request){
@@ -88,9 +125,10 @@ class UnidadController extends Controller
             $direccion='documentos';
             $newurl=Storage::url($request->file('archivo')->store($direccion,'public_file'));
             //eliminamos el anterior documento
-            $path = public_path().$documento->path;
-            unlink($path);
-
+            if($documento->path!=''){
+                $path = public_path().$documento->path;
+                unlink($path);
+            }
             $documento->path=$newurl;
             $documento->save();
             return 'cambiado';

@@ -45,8 +45,6 @@ class AdminController extends Controller
             }else{
                 return Excel::download(new DocumentoFechasExport($request->fecha1,$request->fecha2,$tipo),"documento.xlsx");
             }
-
-            
         }catch(Exception $e){
             return $e;
         }
@@ -82,7 +80,7 @@ class AdminController extends Controller
     }
 
     public function oficinas(){
-        return oficina::all()->map(function($o){
+        return oficina::where('estado',1)->get()->map(function($o){
             return[
                 'id'=>$o->id,
                 'nombre'=>$o->nombre,

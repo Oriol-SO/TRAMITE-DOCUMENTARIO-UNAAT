@@ -18,7 +18,7 @@
                 hide-details
             ></v-text-field>
             <v-btn class="ml-auto" color="green accent-3" small @click="exportar_docs()">Exportar</v-btn>
-            <v-btn class="ml-auto" color="purple" small @click="exportar_tiempos()">Exportar Tiempos</v-btn>
+            <v-btn class="ml-auto" color="purple" small @click="exportar_tiempos()">Tiempos de registro</v-btn>
             </v-card-title>
             <v-card elevation="0">
                 <v-card-text class="d-flex">
@@ -234,7 +234,7 @@ export default {
                     const link = document.createElement('a');
                     console.log(url);
                     link.href = url;
-                    link.setAttribute('download', 'documento.xlsx');
+                    link.setAttribute('download', 'documentos.xlsx');
                     document.body.appendChild(link);
                     link.click();
             }).catch(error=>{

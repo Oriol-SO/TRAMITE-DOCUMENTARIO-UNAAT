@@ -14,6 +14,7 @@ use App\Http\Controllers\OficinaController;
 use App\Http\Controllers\Settings\PasswordController;
 use App\Http\Controllers\Settings\ProfileController;
 use App\Http\Controllers\UnidadController;
+use App\Models\oficina;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -84,3 +85,5 @@ Route::post('exportar-excel-seguimientos',[AdminController::class,'exportar_docs
 Route::post('exportar-excel-seguimientos-oficinas',[AdminController::class,'exportar_docs_seguimiento_ofic']);
 Route::post('exportar-excel-creaciones',[AdminController::class,'exportar_docs_tiempos']);
 
+Route::get('all-oficinas',[OficinaController::class,'oficinas']);
+Route::post('cambiar-estado-oficina',[OficinaController::class,'CambiarEstado']);

@@ -50,14 +50,24 @@
                 v-if="item.estado==1"
                 color="green accent-3"
                 >
-                Archivado
+                Finalizado
                 </v-chip>
-                <v-chip
+
+            </template>
+            <template v-slot:[`item.atendido`]="{ item }">
+                <v-chip 
+                color="warning"
+                small
+                v-if="item.atendido"
+                >
+                    Atendido
+                </v-chip>
+                <v-chip 
+                color="grey"
                 small
                 v-else
-                color="warning"
                 >
-                Pendiente
+                    Pendiente
                 </v-chip>
 
             </template>
@@ -169,6 +179,7 @@ export default {
           { text: 'Tipo', value: 'tipo' },
           { text: 'Prioridad', value: 'prioridad' },
           { text: 'Estado', value: 'estado' },
+          { text: 'Actual', value: 'atendido' },
           { text: '', value: 'action' },
          
         ],

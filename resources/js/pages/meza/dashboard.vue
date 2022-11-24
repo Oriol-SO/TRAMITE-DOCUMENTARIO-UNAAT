@@ -34,6 +34,32 @@
                 @click=" $router.push({ path: `/meza-de-partes/documento/${item.id}`, }) ,finalizar_tiempo_busqueda(item.id) "  
                 >Seguimiento</v-btn>
             </template>
+            <template v-slot:[`item.estado`]="{ item }">
+                <v-chip 
+                color="green accent-3"
+                small
+                v-if="item.estado==1"
+                >
+                    Finalizado
+                </v-chip>
+            </template>
+            <template v-slot:[`item.atendido`]="{ item }">
+                <v-chip 
+                color="warning"
+                small
+                v-if="item.atendido"
+                >
+                    Atendido
+                </v-chip>
+                <v-chip 
+                color="grey"
+                small
+                v-else
+                >
+                    Pendiente
+                </v-chip>
+
+            </template>
             
             </v-data-table>
         </v-card>
@@ -187,6 +213,8 @@ export default {
           { text: 'DNI', value: 'dni' },
           { text: 'Destino', value: 'destino' },
           { text: 'Tipo', value: 'tipo' },
+          { text: 'Estado', value: 'estado' },
+          { text: 'Actual', value: 'atendido' },
           { text: '', value: 'action' },
          
         ],

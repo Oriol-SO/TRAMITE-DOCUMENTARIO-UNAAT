@@ -27,15 +27,51 @@ class DocumentoController extends Controller
     }
 
     public function documentos(){
-        return documento::all();
+        return documento::where('id','<>',null)->orderBy('id', 'desc')->get()->map(function($d){
+            $proceso=Proceso::where('documento_id',$d->id)->orderBy('id', 'desc')->first();
+                $der=false;
+                $rep=false;
+                $archi=false;
+                if($d->estado==0 && $this->oficina==$proceso->oficina_input && $proceso->oficina_ouput==null){
+                    $der=true;
+                }
+                if($d->estado==0 && $this->oficina==$proceso->oficina_ouput  && $proceso->recibido==0 && $d->oficina_id==$this->oficina){
+                    $rep=true;
+                }
+                if($d->estado==0 && $this->oficina==$proceso->oficina_input && $proceso->oficina_ouput==null){
+                    $archi=true;
+                }
+                $antendido=true;
+                if($der==true || $rep ==true ){
+                    $antendido=false;
+                }
+                if($archi==true){
+                    $antendido=false;
+                }
+            return[
+                'id'=>$d->id,
+                'documento'=>$d->documento,
+                'fecha'=>$d->fecha,
+                'path'=>$d->path,
+                'remitente'=>$d->remitente,
+                'dni'=>$d->dni,
+                'estado'=>$d->estado,
+                'destino'=>$d->destino,
+                'tipo'=>$d->tipo,
+                'tiempo_final'=>$d->fecha_fin,
+                'atendido'=>$antendido,
+                
+            ];
+        });
     }
 
     public function add_documento(Request $request){
+        
         $request->validate([
             'nombre'=>'required',
             'remitente'=>'required',
             'dni'=>'required|numeric',
-            'archivo'=>'required',
+            //'archivo'=>'required',
             'destino'=>'required',
             'tipo'=>'required',
             'prioridad'=>'required',
@@ -43,6 +79,7 @@ class DocumentoController extends Controller
             'numero_doc'=>'required',
         ]);
         try{
+            
             $prioridad=20;
             switch($request->prioridad){
                 case 'NORMAL':
@@ -62,10 +99,12 @@ class DocumentoController extends Controller
                     break;
             }
 
+            $url='';
+            if($request->archivo){
+                $direccion='documentos';
+                $url=Storage::url($request->file('archivo')->store($direccion,'public_file'));
+            }
 
-            $direccion='documentos';
-            $url=Storage::url($request->file('archivo')->store($direccion,'public_file'));
-            
             $doc=documento::create([
                 'documento'=>$request->nombre,
                 'fecha'=>Carbon::now(),
