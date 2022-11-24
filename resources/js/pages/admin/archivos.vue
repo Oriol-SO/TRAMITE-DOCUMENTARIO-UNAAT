@@ -7,7 +7,8 @@
 
         <v-card>
             <v-card-title>
-                <v-toolbar elevation="0" max-width="150" >REPORTES
+                <v-toolbar elevation="0" max-width="300" >
+                    SOPORTE DE ARCHIVOS
                     
                 </v-toolbar>
             <v-text-field
@@ -17,42 +18,7 @@
                 single-line
                 hide-details
             ></v-text-field>
-
-            <v-btn class="ml-auto mr-2 text-capitalize" dark color="purple" small @click="exportar_tiempos()">Tiempos de registro </v-btn>
-            <v-btn class="ml-auto mr-2 text-capitalize" dark color="primary" small @click="exportar_tiempos_seguis()">Tiempos de seguimiento</v-btn>
-            <v-btn class="ml-auto mr-2 text-capitalize" color="green accent-3" small @click="exportar_docs()">Reporte de documentos</v-btn>
-           
-            </v-card-title>
-            <v-card elevation="0">
-                <v-card-text class="d-flex">
-                    <v-select
-                        v-model="formfecha.tipo"
-                        label="Buscar por"
-                        :items="['Fecha de creación','Fecha archivado']"
-                    ></v-select>
-                    <v-text-field
-                    class="mx-5"
-                        v-model="formfecha.fecha1"
-                        type="date"
-                        color="primary"
-                        label="Fecha inicial"
-                    ></v-text-field>
-                    <v-text-field
-                        class="mx-5"
-                        color="green accent-3"
-                        v-model="formfecha.fecha2"
-                        
-                        type="date"
-                        label="Fecha final"
-                    ></v-text-field>
-                    <v-btn
-                    color="warning"
-                    small
-                    @click="buscar_fechas()">
-                        Buscar
-                    </v-btn>
-                </v-card-text>
-            </v-card>
+            </v-card-title>   
             <v-data-table
             :headers="headers"
             :items="documentos"
@@ -62,12 +28,12 @@
                 <v-btn
                 small
                 rounded
-                color="green accent-3"
+                color="primary"
                 elevation="0"
                 style="color:#fff;"
                 class="text-capitalize"
                 @click="ver(item)"  
-                >Ver</v-btn>
+                >Ver proceso</v-btn>
             </template>
             
             </v-data-table>

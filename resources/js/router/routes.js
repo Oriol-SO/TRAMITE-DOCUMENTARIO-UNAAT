@@ -32,6 +32,7 @@ export default [
       { path: 'dashboard', name: 'dash.admin', component: page('admin/dashboard.vue') },
       { path: 'reportes', name: 'admin.repo', component: page('admin/reportes.vue') },
       { path: 'oficinas', name: 'admin.oficinas', component: page('admin/oficinas.vue') },
+      { path: 'archivos', name: 'admin.archivos', component: page('admin/archivos.vue') },
     ]
   },
   {

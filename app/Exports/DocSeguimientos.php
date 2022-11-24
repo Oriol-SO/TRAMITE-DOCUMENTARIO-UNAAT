@@ -16,7 +16,7 @@ use PhpOffice\PhpSpreadsheet\Reader\Xml\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Style\Fill as StyleFill;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
-class DocExportTiempos implements FromCollection,WithTitle,WithHeadings,WithStyles,ShouldAutoSize
+class DocSeguimientos implements FromCollection,WithTitle,WithHeadings,WithStyles,ShouldAutoSize
 {
     /**
     * @return \Illuminate\Support\Collection
@@ -41,7 +41,7 @@ class DocExportTiempos implements FromCollection,WithTitle,WithHeadings,WithStyl
         $sheet->mergeCells('A2:E2');
         $sheet->mergeCells('A1:E1');
        // $sheet->getStyle('A1')->setValignment('center');
-       $cell=tiempo::all()->count();
+       $cell=seguimiento::all()->count();
        $sheet->getStyle('A1:E'.$cell+3)->ApplyFromArray($borderDashed);
 
     
@@ -54,12 +54,12 @@ class DocExportTiempos implements FromCollection,WithTitle,WithHeadings,WithStyl
     public function headings(): array
     {
         return [
-            ['TIEMPO DE REGISTRO DE LOS DOCUMENTOS'],
+            ['TIEMPOS DE SEGUIMIENTO DE LOS DOCUMENTOS'],
             ['FECHA: '.Carbon::now()],
             [
                 'N°',
                 'DOCUMENTO',
-                'FECHA DE REGISTRO',
+                'FECHA DE BUSQUEDA',
                 'UNIDAD',
                 'DURACION EN SEGUNDOS',
             ]
@@ -70,11 +70,11 @@ class DocExportTiempos implements FromCollection,WithTitle,WithHeadings,WithStyl
     public function collection()
     {
         $num=1;
-        $seguis= tiempo::all()->map(function($d) use(&$num){
+        $seguis= seguimiento::all()->map(function($d) use(&$num){
             return[
                 'N°'=>$num++,
                 'DOCUMENTO'=>$d->documento_id,
-                'FECHA DE REGISTRO'=>$d->inicio,
+                'FECHA DE BUSQUEDA'=>$d->inicio,
                 'UNIDAD'=>'pro',
                 'DURACION EN SEGUNDOS'=>strtotime($d->final)-strtotime($d->inicio),
             ];

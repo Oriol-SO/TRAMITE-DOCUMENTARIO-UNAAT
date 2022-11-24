@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Exports\DocExportSeguimientoOficina;
 use App\Exports\DocExportsSeguimiento;
 use App\Exports\DocExportTiempos;
+use App\Exports\DocSeguimientos;
 use App\Exports\DocumentoExport;
 use App\Exports\DocumentoFechasExport;
 use App\Models\documento;
@@ -20,7 +21,9 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class AdminController extends Controller
 {
-
+    public function exportar_seguimientos(Request $request){
+        return Excel::download(new DocSeguimientos, 'documentos.xlsx');
+    }
     public function exportar_docs_tiempos(Request $request){
         return Excel::download(new DocExportTiempos, 'documentos.xlsx');
     }

@@ -89,6 +89,8 @@ Route::post('exportar-excel',[AdminController::class,'exportar_docs']);
 Route::post('exportar-excel-seguimientos',[AdminController::class,'exportar_docs_seguimiento']);
 Route::post('exportar-excel-seguimientos-oficinas',[AdminController::class,'exportar_docs_seguimiento_ofic']);
 Route::post('exportar-excel-creaciones',[AdminController::class,'exportar_docs_tiempos']);
+Route::post('exportar-seguimientos',[AdminController::class,'exportar_seguimientos']);
+
 
 Route::get('all-oficinas',[OficinaController::class,'oficinas']);
 Route::post('cambiar-estado-oficina',[OficinaController::class,'CambiarEstado']);
