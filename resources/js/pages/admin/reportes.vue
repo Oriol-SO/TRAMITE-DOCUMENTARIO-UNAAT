@@ -145,7 +145,11 @@
                             <strong class="ma-1" >{{proc.oficina_input_nom}}</strong>
                             <div class="ma-2 pa-2" >
                             <span>Fecha de recepción:</span> <v-chip small color="warning">{{proc.recepcion}}</v-chip> <br> <br>
-                            <span >Fecha de derivación:</span> <v-chip small color="green accent-3">{{proc.derivacion}}</v-chip>
+                            <span v-if="proc.derivacion" >Fecha de derivación:</span> <v-chip v-if="proc.derivacion" small color="green accent-3">{{proc.derivacion}}</v-chip>
+                            <div v-else-if="doc.fecha_fin">
+                                <strong >Archivado el </strong><v-chip small color="primary">{{doc.fecha_fin}}</v-chip>
+                            </div>
+                            
                             </div>
                     </div>
                 </v-card>
