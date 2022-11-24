@@ -41,7 +41,7 @@
                 <v-card-text>
                     <v-select 
                     v-model="form.oficina"
-                    label="Elija la oficina"
+                    label="Elija el organo/unidad"
                     :items="oficinas"
                     return-object
                     item-text="nombre"

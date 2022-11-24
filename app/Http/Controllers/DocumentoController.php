@@ -143,6 +143,7 @@ class DocumentoController extends Controller
                 'destino'=>$d->destino,
                 'tipo'=>$d->tipo,
                 'tiempo_creacion'=>$date,
+                'tiempo_final'=>$d->fecha_fin,
                 'proceso'=>Proceso::where('documento_id',$d->id)->get()->map(function($p) use(&$d){
                     $oficina_i=oficina::where('id',$p->oficina_input)->first();
                     $oficina_o=oficina::where('id',$p->oficina_ouput)->first();

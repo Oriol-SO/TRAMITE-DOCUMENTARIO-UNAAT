@@ -35,7 +35,12 @@
                         </v-col>
                         <v-col cols="12" class="py-0" sm="6" md="4">
                             <v-list-item-subtitle>
-                                <div class="box-data"><strong>Tiempo creación: </strong>   <div class="box-data-valor"><v-chip small color="purple lighten-4"> {{dato.tiempo_creacion}}</v-chip></div></div>
+                                <div class="box-data"><strong>Tiempo de registro: </strong>   <div class="box-data-valor"><v-chip small color="purple lighten-4"> {{dato.tiempo_creacion}}</v-chip></div></div>
+                            </v-list-item-subtitle>
+                        </v-col>
+                        <v-col cols="12" class="py-0" sm="6" md="4" v-if="dato.tiempo_final">
+                            <v-list-item-subtitle>
+                                <div class="box-data"><strong>Tiempo de final: </strong>   <div class="box-data-valor"><v-chip small color="green accent-3"> {{dato.tiempo_final}}</v-chip></div></div>
                             </v-list-item-subtitle>
                         </v-col>
                         </v-row>

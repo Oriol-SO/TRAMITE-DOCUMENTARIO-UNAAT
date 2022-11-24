@@ -177,7 +177,7 @@ import Form from "vform";
 export default {
    data(){
     return{
-        hola:'Vienvenido a Meza de partes',
+        hola:'Bienvenido a Meza de partes',
         search: '',
         headers: [
           { text: 'Codigo',align: 'start', value: 'id' },
@@ -216,6 +216,7 @@ export default {
             'INFORME LEGAL',
             'CARTA',
             'OFICIO',
+            'SOLICITUD',
             'OFICIO MULTIPLE',
         ],
         prioridades:[

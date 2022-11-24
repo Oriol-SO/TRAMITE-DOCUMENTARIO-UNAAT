@@ -18,7 +18,7 @@
                 hide-details
             ></v-text-field>
             <v-btn class="ml-auto" color="green accent-3" small @click="exportar_docs()">Exportar</v-btn>
-           
+            <v-btn class="ml-auto" color="purple" small @click="exportar_tiempos()">Exportar Tiempos</v-btn>
             </v-card-title>
             <v-card elevation="0">
                 <v-card-text class="d-flex">
@@ -72,7 +72,7 @@
 
         <v-dialog
         v-model="dialog"
-        max-width="600"
+        max-width="700"
         >
             <v-card>
                 <v-toolbar elevation="0" color="primary" dark>
@@ -90,11 +90,17 @@
                              <v-col cols="12" sm="4" class="py-0 my-0">
                                 <strong>DNI :</strong> <br>{{doc.dni}}
                             </v-col>
-                             <v-col cols="12" class="py-0 my-0">
+                             <v-col cols="12" sm="4" class="py-0 my-0">
                                 <strong>Destino:</strong> <br>{{doc.destino}}
                             </v-col>
+                            <v-col cols="12"  sm="4" class="py-0 my-0">
+                                <strong>Creación:</strong> <br>{{doc.fecha}}
+                            </v-col>
+                            <v-col cols="12"  sm="4" class="py-0 my-0">
+                                <strong>Fin:</strong> <br>{{doc.fecha_fin}}
+                            </v-col>
                              <v-col cols="12" sm="4" class="py-0 my-0">
-                                <strong>Prioridad:</strong> <br>{{doc.prioridad}}
+                                <strong>Prioridad:</strong> <br>{{doc.nombre_prioridad}}
                             </v-col>
                             <v-col cols="12" sm="4" class="py-0 my-0">
                                 <strong>Tipo:</strong> <br>{{doc.tipo}}
@@ -150,8 +156,17 @@
                 small
                 dark
                 color="green accent-3"
+                @click="tiempo_seguimiento(doc)"
                 >
-                    Exportar datos
+                    Tiempos de seguimiento
+                </v-btn>
+                <v-btn
+                small
+                dark
+                color="warning"
+                @click="seguimiento_oficinas(doc)"
+                >
+                    Seguimiento de oficinas
                 </v-btn>
                 
             </v-card-actions>
@@ -220,6 +235,67 @@ export default {
                     console.log(url);
                     link.href = url;
                     link.setAttribute('download', 'documento.xlsx');
+                    document.body.appendChild(link);
+                    link.click();
+            }).catch(error=>{
+                console.log('error');
+            })
+        },
+        tiempo_seguimiento(doc){
+
+            let form=new Form({
+                documento:doc.id,    
+            })
+            form.post('/api/exportar-excel-seguimientos',{ headers: {
+               // 'Content-Type': 'multipart/form-data',
+            },
+                'responseType': 'blob' // responseType is a sibling of headers, not a child
+            }).then(response=>{    
+                    const url = window.URL.createObjectURL(new Blob([response.data]));
+                    const link = document.createElement('a');
+                    console.log(url);
+                    link.href = url;
+                    link.setAttribute('download', 'seguimiento.xlsx');
+                    document.body.appendChild(link);
+                    link.click();
+            }).catch(error=>{
+                console.log('error');
+            })
+        },
+        seguimiento_oficinas(doc){
+            let form=new Form({
+                documento:doc.id,    
+            })
+            form.post('/api/exportar-excel-seguimientos-oficinas',{ headers: {
+               // 'Content-Type': 'multipart/form-data',
+            },
+                'responseType': 'blob' // responseType is a sibling of headers, not a child
+            }).then(response=>{    
+                    const url = window.URL.createObjectURL(new Blob([response.data]));
+                    const link = document.createElement('a');
+                    console.log(url);
+                    link.href = url;
+                    link.setAttribute('download', 'seguimiento-oficina.xlsx');
+                    document.body.appendChild(link);
+                    link.click();
+            }).catch(error=>{
+                console.log('error');
+            })
+        },
+        exportar_tiempos(){
+            let form=new Form({
+                documento:1,    
+            })
+            form.post('/api/exportar-excel-creaciones',{ headers: {
+               // 'Content-Type': 'multipart/form-data',
+            },
+                'responseType': 'blob' // responseType is a sibling of headers, not a child
+            }).then(response=>{    
+                    const url = window.URL.createObjectURL(new Blob([response.data]));
+                    const link = document.createElement('a');
+                    console.log(url);
+                    link.href = url;
+                    link.setAttribute('download', 'tiempos-creacion.xlsx');
                     document.body.appendChild(link);
                     link.click();
             }).catch(error=>{

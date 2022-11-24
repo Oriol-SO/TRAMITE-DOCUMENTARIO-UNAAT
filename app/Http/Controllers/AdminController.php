@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\DocExportSeguimientoOficina;
+use App\Exports\DocExportsSeguimiento;
+use App\Exports\DocExportTiempos;
 use App\Exports\DocumentoExport;
 use App\Exports\DocumentoFechasExport;
 use App\Models\documento;
@@ -17,6 +20,17 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class AdminController extends Controller
 {
+
+    public function exportar_docs_tiempos(Request $request){
+        return Excel::download(new DocExportTiempos, 'documentos.xlsx');
+    }
+
+    public function exportar_docs_seguimiento_ofic(Request $request){
+        return Excel::download(new DocExportSeguimientoOficina($request->documento), 'documentos.xlsx');
+    }
+    public function exportar_docs_seguimiento(Request $request){
+        return Excel::download(new DocExportsSeguimiento($request->documento), 'documentos.xlsx');
+    }
 
     public function exportar_docs(Request $request){
         $tipo='fecha';
@@ -72,6 +86,7 @@ class AdminController extends Controller
             return[
                 'id'=>$o->id,
                 'nombre'=>$o->nombre,
+                'estado'=>$o->estado,
             ];
         });
     }
@@ -147,14 +162,31 @@ class AdminController extends Controller
         return $request;
     }
 
-
+    public function prioridad($prioridad){
+        switch($prioridad){
+            case 20:
+                return 'Normal';
+            case 19:
+                return 'Especial';
+            case 18:
+                return 'Urgente';
+            case 17:
+                return 'Muy urgente';
+            default:
+                return '';
+        }
+    }
     public function documentos_rep(){
         return documento::where('estado',1)->get()->map(function($d){
             $ofi=oficina::where('id',$d->oficina_id)->first();
+            
+
+
             return[
                 'id'=>$d->id,
                 'documento'=>$d->documento,
                 'fecha'=>$d->fecha,
+                'fecha_fin'=>$d->fecha_fin,
                 'remitente'=>$d->remitente,
                 'dni'=>$d->dni,
                 'destino'=>$d->destino,
@@ -162,6 +194,7 @@ class AdminController extends Controller
                 'tipo'=>$d->tipo,
                 'estado'=>$d->estado,
                 'prioridad'=>$d->prioridad,
+                'nombre_prioridad'=>$this->prioridad($d->prioridad),
                 'oficina_id'=>1,
                 'oficina'=>$ofi?$ofi->nombre:null,
                 'duracion'=>Carbon::parse($d->fecha)->diffInDays(Carbon::parse($d->fecha_fin)).' días',
@@ -232,8 +265,14 @@ class AdminController extends Controller
         }
         oficina::create([
             'nombre'=>$request->nombre,
+            'estado'=>1,
         ]);
         return true;
         
+    }
+    public function estado_oficina($id,$estado){
+        $ofi=oficina::findOrFail($id);
+        $ofi->estado=!$estado;
+        $ofi->save();
     }
 }

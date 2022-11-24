@@ -9,11 +9,11 @@
 
         <v-card>
             <v-card-title>
-                <v-toolbar elevation="0" >Oficinas </v-toolbar>
+                <v-toolbar elevation="0" >Órganos-Unidades </v-toolbar>
             <v-text-field
                 v-model="search"
                 append-icon="mdi-magnify"
-                label="Buscar Oficina"
+                label="Buscar órgano/unidad"
                 single-line
                 hide-details
             ></v-text-field>
@@ -27,7 +27,12 @@
             :items="oficinas"
             :search="search"
             >
-
+            <template v-slot:[`item.action`]="{ item }">
+                <v-switch
+                v-model="item.estado"   
+                @change="cambiarestado(item)"
+                ></v-switch>
+            </template>
             </v-data-table>
         </v-card>
 
@@ -47,7 +52,7 @@
                         >
                             <v-text-field
                             v-model="form.nombre"
-                            label="Nombre de la oficina"
+                            label="Nombre del organo-unidad"
                             required
                             ></v-text-field>
                         </v-col>
@@ -87,13 +92,14 @@ export default {
     return{
         dialog:false,
         color_user:'green accent-3',
-        msg_user:'Agregar nueva oficina',
+        msg_user:'Agregar nuevo organo/unidad',
         search:'',
         msg:'Panel de administrador',
         oficinas:[],
         headers:[
           { text: 'Codigo',align: 'start', value: 'id' },
           { text: 'Nombre',align: 'start', value: 'nombre' },
+          { text: 'Acciones',align: 'start', value: 'action' },
         ],
         form:new Form({
             nombre:''
@@ -118,6 +124,15 @@ export default {
                 this.dialog=false;
                 this.fetch_oficinas()
             })
+        },
+        cambiarestado(item){
+            console.log(item)
+            let form=new Form({
+                estado:item.estado,
+                oficina:item.id
+            });
+
+            form.p
         }
 
    }

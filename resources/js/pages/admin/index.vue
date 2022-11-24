@@ -21,7 +21,7 @@ export default {
       { title: "Inicio", icon: "mdi-view-dashboard", to: "dash.admin" },
       { title: "Reportes", icon: "mdi-file-document",to: "admin.repo"},
       /*{ title: "Personas/Usuarios", icon: "mdi-account-multiple",to: "admin.roles"},*/
-      { title: "Oficinas", icon: "mdi-folder", to: "admin.oficinas" },
+      { title: "Organos-Unidades", icon: "mdi-folder", to: "admin.oficinas" },
    
     ],
     }
