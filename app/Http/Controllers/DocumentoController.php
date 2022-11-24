@@ -27,7 +27,8 @@ class DocumentoController extends Controller
     }
 
     public function documentos(){
-        return documento::where('id','<>',null)->orderBy('id', 'desc')->get()->map(function($d){
+        $num=1;
+        return documento::where('id','<>',null)->orderBy('id', 'desc')->get()->map(function($d)use(&$num){
             $proceso=Proceso::where('documento_id',$d->id)->orderBy('id', 'desc')->first();
                 $der=false;
                 $rep=false;
@@ -49,6 +50,7 @@ class DocumentoController extends Controller
                     $antendido=false;
                 }
             return[
+                'n'=>$num++,
                 'id'=>$d->id,
                 'documento'=>$d->documento,
                 'fecha'=>$d->fecha,

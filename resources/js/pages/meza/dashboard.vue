@@ -206,7 +206,7 @@ export default {
         hola:'Bienvenido a Meza de partes',
         search: '',
         headers: [
-          { text: 'Codigo',align: 'start', value: 'id' },
+          { text: 'N°',align: 'start', value: 'n' },
           { text: 'Documento',align: 'start', value: 'documento' },
           { text: 'Fecha', value: 'fecha' },
           { text: 'Responsable', value: 'remitente' },
