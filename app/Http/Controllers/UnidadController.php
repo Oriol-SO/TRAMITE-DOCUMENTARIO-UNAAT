@@ -255,6 +255,7 @@ class UnidadController extends Controller
                 'documento_id'=>$doc->id,
                 'inicio'=>date('Y-m-d H:i:s',$inicio ),
                 'final'=>date('Y-m-d H:i:s',$final ),
+                'unidad_id'=>$this->oficina,
             ]);
             Proceso::create([
                 'recepcion'=>Carbon::now(),

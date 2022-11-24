@@ -6,7 +6,8 @@ import verdoc from '~/components/verdocumento.vue';
 import accionesdoc from '~/components/accionesdoc.vue';
 import sidevar from '~/components/sidevar.vue';
 import adddocumento from '~/components/agregardocumento.vue';
-
+import soporteproc from '~/components/soporteprocesos.vue';
+ 
 // Components that are registered globaly.
 [
   Child,
@@ -17,7 +18,8 @@ import adddocumento from '~/components/agregardocumento.vue';
   verdoc,
   accionesdoc,
   sidevar,
-  adddocumento
+  adddocumento,
+  soporteproc
 ].forEach(Component => {
   Vue.component(Component.name, Component)
 })

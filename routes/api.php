@@ -95,4 +95,7 @@ Route::post('exportar-seguimientos',[AdminController::class,'exportar_seguimient
 Route::get('all-oficinas',[OficinaController::class,'oficinas']);
 Route::post('cambiar-estado-oficina',[OficinaController::class,'CambiarEstado']);
 
+
+Route::get('documentos-archivo',[AdminController::class,'documentos_archivo']);
+
 //a

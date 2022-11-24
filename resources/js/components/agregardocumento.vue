@@ -21,13 +21,13 @@
                         </v-text-field>
                     </v-col>  
                     <v-row>
-                        <!--v-col cols="6">
+                        <v-col cols="4">
                         <v-text-field
                         v-model="form.numero_doc"
-                        label="Numero de documento Ejem:0001"
+                        label="Numero de documento"
                         >
                         </v-text-field>
-                        </v-col-->
+                        </v-col>
                         <v-col cols="4">
                             <v-select
                             v-model="form.tipo_doc"
@@ -36,7 +36,7 @@
                             >
                             </v-select>
                         </v-col>
-                        <v-col cols="8">
+                        <v-col cols="4">
                         <v-text-field
                         v-model="form.direccion"
                         label="Direcciones"

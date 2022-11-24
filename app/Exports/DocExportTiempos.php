@@ -3,6 +3,7 @@
 namespace App\Exports;
 
 use App\Models\documento;
+use App\Models\oficina;
 use App\Models\seguimiento;
 use App\Models\tiempo;
 use Carbon\Carbon;
@@ -71,11 +72,12 @@ class DocExportTiempos implements FromCollection,WithTitle,WithHeadings,WithStyl
     {
         $num=1;
         $seguis= tiempo::all()->map(function($d) use(&$num){
+            $ofi=oficina::where('id',$d->unidad_id)->first();
             return[
                 'N°'=>$num++,
                 'DOCUMENTO'=>$d->documento_id,
                 'FECHA DE REGISTRO'=>$d->inicio,
-                'UNIDAD'=>'pro',
+                'UNIDAD'=>$ofi?$ofi->nombre:null,
                 'DURACION EN SEGUNDOS'=>strtotime($d->final)-strtotime($d->inicio),
             ];
         });

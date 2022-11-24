@@ -20,10 +20,14 @@
                             <v-col cols="4">{{proc.derivar}}</v-col>
                              <v-col cols="4"><v-chip small color="green accent-3">{{proc.nom_ouput}}</v-chip></v-col>
                         </v-row>
-                        <v-row v-if="proc.prohevido">
-                            <v-col cols="12" class="py-0">
-                                <strong style="color:blue;">Prohevido:</strong> <br>
+                        <v-row v-if="proc.prohevido || proc.asunto">
+                            <v-col cols="6" class="py-0">
+                                <strong style="color:blue;">Provehido:</strong> <br>
                                 <span>{{proc.prohevido}}</span>
+                            </v-col>
+                            <v-col cols="6" class="py-0">
+                                <strong style="color:blue;">Asunto:</strong> <br>
+                                <span>{{proc.asunto}}</span>
                             </v-col>
                         </v-row>
                     </div>
@@ -31,10 +35,19 @@
                         <v-text-field
                          v-if="proc.ac_derivar"
                          v-model="form.prohevido"
-                         label="Prohevido"
+                         label="Provehido"
+                        >
+                        </v-text-field>
+                          <v-text-field
+                         class="ml-4"
+                         v-if="proc.ac_derivar"
+                         v-model="form.asunto"
+                         color="green"
+                         label="Asunto"
                         >
                         </v-text-field>
                     </v-card-actions>
+                    
                     <v-card-actions>
                         <v-btn v-if="proc.ac_rep" small color="green accent-3" @click="recepcionar_doc(proc)">
                             Recepcionar
@@ -109,6 +122,7 @@ export default {
                 documento:'',
                 proceso:'',
                 prohevido:'',
+                asunto:'',
             }),
 
             form2:new Form({

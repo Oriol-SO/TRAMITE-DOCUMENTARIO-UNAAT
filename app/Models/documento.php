@@ -27,6 +27,7 @@ class documento extends Model
         'folio',
         'fecha_fin',
         'resuelto',
-        'fecha_ate'
+        'fecha_ate',
+        'asunto',
     ];
 }

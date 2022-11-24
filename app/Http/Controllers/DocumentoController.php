@@ -140,6 +140,7 @@ class DocumentoController extends Controller
                 'documento_id'=>$doc->id,
                 'inicio'=>date('Y-m-d H:i:s',$inicio ),
                 'final'=>date('Y-m-d H:i:s',$final ),
+                'unidad_id'=>$this->oficina,
             ]);
             Proceso::create([
                 'recepcion'=>Carbon::now(),
@@ -233,6 +234,7 @@ class DocumentoController extends Controller
                         'ac_rep'=>$rep,
                         'archivar'=>$archi,
                         'prohevido'=>$p->prohevido,
+                        'asunto'=>$p->asunto,
                     ];
                 }),
             ];
@@ -266,6 +268,7 @@ class DocumentoController extends Controller
                 'oficina_ouput'=>$oficina->id,
                 'estado_der'=>1,
                 'prohevido'=>$request->prohevido,
+                'asunto'=>$request->asunto,
             ]);
             documento::where('id',$documento->id)->update(['oficina_id'=>$oficina->id]);
             //ahora creamos un nuevo registro 
@@ -296,6 +299,7 @@ class DocumentoController extends Controller
             'documento_id'=>$documento->id,
             'inicio'=>date('Y-m-d H:i:s',$inicio ),
             'final'=>date('Y-m-d H:i:s',$final ),
+            'unidad_id'=>$this->oficina,
         ]);
     }
 }

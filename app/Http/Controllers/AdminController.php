@@ -178,11 +178,9 @@ class AdminController extends Controller
         }
     }
     public function documentos_rep(){
-        return documento::where('estado',1)->get()->map(function($d){
+        return documento::all()->map(function($d){
             $ofi=oficina::where('id',$d->oficina_id)->first();
             
-
-
             return[
                 'id'=>$d->id,
                 'documento'=>$d->documento,
@@ -193,6 +191,7 @@ class AdminController extends Controller
                 'destino'=>$d->destino,
                 'path'=>$d->path,
                 'tipo'=>$d->tipo,
+                'tiempo_final'=>$d->fecha_fin,
                 'estado'=>$d->estado,
                 'prioridad'=>$d->prioridad,
                 'nombre_prioridad'=>$this->prioridad($d->prioridad),
@@ -213,6 +212,58 @@ class AdminController extends Controller
             ];
         });
     }
+
+
+    public function documentos_archivo(){
+        return documento::all()->map(function($d){
+            $ofi=oficina::where('id',$d->oficina_id)->first();
+            $count=1;
+            return[
+                'id'=>$d->id,
+                'documento'=>$d->documento,
+                'fecha'=>$d->fecha,
+                'fecha_fin'=>$d->fecha_fin,
+                'remitente'=>$d->remitente,
+                'dni'=>$d->dni,
+                'destino'=>$d->destino,
+                'path'=>$d->path,
+                'tipo'=>$d->tipo,
+                'tiempo_final'=>$d->fecha_fin,
+                'estado'=>$d->estado,
+                'estado_res'=>$d->resuelto,
+                'prioridad'=>$d->prioridad,
+                'nombre_prioridad'=>$this->prioridad($d->prioridad),
+                'oficina_id'=>1,
+                'oficina'=>$ofi?$ofi->nombre:null,
+                'duracion'=>Carbon::parse($d->fecha)->diffInDays(Carbon::parse($d->fecha_fin)).' días',
+                'proceso'=>Proceso::where('documento_id',$d->id)->get()->map(function($p)use(&$count){
+                    $ofi=oficina::where('id',$p->oficina_input)->first();
+                    $ofo=oficina::where('id',$p->oficina_ouput)->first();
+                    //$procs=Proceso::where('id',$p->documento_id)->count();
+                    $num=$count++;
+                    $del=false;
+                    if( $p->derivar!=null && $p->recibido!=1 && $p->estado_der==1 ){
+                        $del=true;
+                    }
+                    return[
+                        'num'=>$count++,
+                        'documento_id'=>$p->documento_id,
+                        'id'=>$p->id,
+                        'nom_input'=>$ofi?$ofi->nombre:null,
+                        'nom_ouput'=>$ofo?$ofo->nombre:null,
+                        'recepcion'=>$p->recepcion,
+                        'derivar'=>$p->derivar,
+                        'prohevido'=>$p->prohevido,
+                        'eliminar'=>$del,
+                        'estado_rep'=>$p->recibido,
+                        'estado_der'=>$p->estado_der,
+                    ];
+                }),
+            ];
+        });
+    }
+
+
 
     public function buscar_fechas(Request $request){
         $tipo='fecha';
