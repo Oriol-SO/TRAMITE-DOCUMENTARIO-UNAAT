@@ -26,5 +26,7 @@ class documento extends Model
         'anexo',
         'folio',
         'fecha_fin',
+        'resuelto',
+        'fecha_ate'
     ];
 }

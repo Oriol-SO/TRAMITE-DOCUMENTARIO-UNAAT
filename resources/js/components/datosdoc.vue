@@ -10,34 +10,34 @@
                         <v-row>
                         <v-col cols="12" class="py-0" sm="6" md="4">
                             <v-list-item-subtitle>
-                            <div class="box-data"> <strong>Nombre del documento: </strong>  <div class="box-data-valor">{{dato.documento}}</div></div> 
+                            <div class="box-data"> <strong>Asunto: </strong>  <div class="box-data-valor">{{dato.documento}}</div></div> 
                         </v-list-item-subtitle>
                         </v-col>
                         <v-col cols="12" class="py-0" sm="6" md="4">
                             <v-list-item-subtitle>
-                                <div class="box-data"><strong>Nombre del remitente: </strong>  <div class="box-data-valor">{{dato.remitente}}</div></div>
+                                <div class="box-data"><strong>Interesado: </strong>  <div class="box-data-valor">{{dato.remitente}}</div></div>
                             </v-list-item-subtitle>
                         </v-col>
                         <v-col cols="12" class="py-0" sm="6" md="4">
                             <v-list-item-subtitle>
-                                <div class="box-data"><strong>DNI del remitente: </strong>  <div class="box-data-valor">{{dato.dni}}</div></div>
+                                <div class="box-data"><strong>DNI del interesado: </strong>  <div class="box-data-valor">{{dato.dni}}</div></div>
                             </v-list-item-subtitle>
                         </v-col>
-                        <v-col cols="12" class="py-0" sm="6" md="4">
+                        <!--v-col cols="12" class="py-0" sm="6" md="4">
                             <v-list-item-subtitle>
                                 <div class="box-data"><strong>Destino: </strong>  <div class="box-data-valor">{{dato.destino}}</div></div>
                             </v-list-item-subtitle>
-                        </v-col>
+                        </v-col-->
                         <v-col cols="12" class="py-0" sm="6" md="4">
                             <v-list-item-subtitle>
-                                <div class="box-data"><strong>Fecha creación: </strong>   <div class="box-data-valor"><v-chip small color="warning"> {{dato.fecha}}</v-chip></div></div>
+                                <div class="box-data"><strong>Fecha registro: </strong>   <div class="box-data-valor"><v-chip small color="warning"> {{dato.fecha}}</v-chip></div></div>
                             </v-list-item-subtitle>
                         </v-col>
-                        <v-col cols="12" class="py-0" sm="6" md="4">
+                        <!--v-col cols="12" class="py-0" sm="6" md="4">
                             <v-list-item-subtitle>
                                 <div class="box-data"><strong>Tiempo de registro: </strong>   <div class="box-data-valor"><v-chip small color="purple lighten-4"> {{dato.tiempo_creacion}}</v-chip></div></div>
                             </v-list-item-subtitle>
-                        </v-col>
+                        </v-col-->
                         <v-col cols="12" class="py-0" sm="6" md="4" v-if="dato.tiempo_final">
                             <v-list-item-subtitle>
                                 <div class="box-data"><strong>Tiempo de final: </strong>   <div class="box-data-valor"><v-chip small color="green accent-3"> {{dato.tiempo_final}}</v-chip></div></div>

@@ -5,6 +5,7 @@ import datosdoc from '~/components/datosdoc.vue';
 import verdoc from '~/components/verdocumento.vue';
 import accionesdoc from '~/components/accionesdoc.vue';
 import sidevar from '~/components/sidevar.vue';
+import adddocumento from '~/components/agregardocumento.vue';
 
 // Components that are registered globaly.
 [
@@ -15,7 +16,8 @@ import sidevar from '~/components/sidevar.vue';
   datosdoc,
   verdoc,
   accionesdoc,
-  sidevar
+  sidevar,
+  adddocumento
 ].forEach(Component => {
   Vue.component(Component.name, Component)
 })

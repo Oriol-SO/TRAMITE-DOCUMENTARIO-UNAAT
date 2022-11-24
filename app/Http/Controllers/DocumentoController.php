@@ -49,6 +49,13 @@ class DocumentoController extends Controller
                 if($archi==true){
                     $antendido=false;
                 }
+                $est=3;
+                    if($d->resuelto==1){
+                        $est=2; 
+                    }
+                    if($d->estado==1){
+                        $est=1;
+                    }
             return[
                 'n'=>$num++,
                 'id'=>$d->id,
@@ -57,12 +64,14 @@ class DocumentoController extends Controller
                 'path'=>$d->path,
                 'remitente'=>$d->remitente,
                 'dni'=>$d->dni,
-                'estado'=>$d->estado,
+                'estado'=>$est,
+                'prioridad'=>$d->prioridad,
                 'destino'=>$d->destino,
                 'tipo'=>$d->tipo,
                 'tiempo_final'=>$d->fecha_fin,
                 'atendido'=>$antendido,
-                
+                'archivado'=>1,
+               // 'derivar'=>$der,     
             ];
         });
     }
@@ -74,11 +83,11 @@ class DocumentoController extends Controller
             'remitente'=>'required',
             'dni'=>'required|numeric',
             //'archivo'=>'required',
-            'destino'=>'required',
+            //'destino'=>'required',
             'tipo'=>'required',
             'prioridad'=>'required',
             'tipo_doc'=>'required',
-            'numero_doc'=>'required',
+            //'numero_doc'=>'required',
         ]);
         try{
             
@@ -112,14 +121,14 @@ class DocumentoController extends Controller
                 'fecha'=>Carbon::now(),
                 'remitente'=>$request->remitente,
                 'dni'=>$request->dni,
-                'destino'=>$request->destino,
+                //'destino'=>$request->destino,
                 'path'=>$url,
                 'tipo'=>$request->tipo,
                 'estado'=>0,
                 'prioridad'=>$prioridad,
                 'oficina_id'=>1,
                 'tipo_doc'=>$request->tipo_doc,
-                'numero_doc'=>$request->numero_doc,
+                //'numero_doc'=>$request->numero_doc,
                 'direccion'=>$request->direccion,
                 'referencia'=>$request->referencia,
                 'anexo'=>$request->anexo,
@@ -172,6 +181,14 @@ class DocumentoController extends Controller
         $d=documento::findOrFail($id);
         $tiempo=tiempo::where('documento_id',$d->id)->first();
         $date=$this->tiempo($tiempo->inicio,$tiempo->final);
+        $pro=Proceso::where('documento_id',$d->id)->orderBy('id','desc')->first();
+       // $oficina_i=oficina::where('id',$pro->oficina_input)->first();
+        //$oficina_o=oficina::where('id',$pro->oficina_ouput)->first();
+        $der=false;
+        if($d->estado==0 && $this->oficina==$pro->oficina_input && $pro->oficina_ouput==null){
+            $der=true;
+        }
+
         try{
             return [
                 'id'=>$d->id,
@@ -183,8 +200,10 @@ class DocumentoController extends Controller
                 'estado'=>$d->estado,
                 'destino'=>$d->destino,
                 'tipo'=>$d->tipo,
+                'resuelto'=>$d->resuelto,
                 'tiempo_creacion'=>$date,
                 'tiempo_final'=>$d->fecha_fin,
+                'accion'=>$der,
                 'proceso'=>Proceso::where('documento_id',$d->id)->get()->map(function($p) use(&$d){
                     $oficina_i=oficina::where('id',$p->oficina_input)->first();
                     $oficina_o=oficina::where('id',$p->oficina_ouput)->first();
@@ -192,10 +211,10 @@ class DocumentoController extends Controller
                     $der=false;
                     $rep=false;
                     $archi=false;
-                    if($d->estado==0 && $this->oficina==$p->oficina_input && $p->oficina_ouput==null){
+                    if($d->estado==0 && $d->resuelto==0 && $this->oficina==$p->oficina_input && $p->oficina_ouput==null){
                         $der=true;
                     }
-                    if($d->estado==0 && $this->oficina==$p->oficina_ouput  &&$p->recibido==0 && $d->oficina_id==$this->oficina){
+                    if($d->estado==0 && $d->resuelto==0 && $this->oficina==$p->oficina_ouput  &&$p->recibido==0 && $d->oficina_id==$this->oficina){
                         $rep=true;
                     }
                     if($d->estado==0 && $this->oficina==$p->oficina_input && $p->oficina_ouput==null){
@@ -213,6 +232,7 @@ class DocumentoController extends Controller
                         'ac_derivar'=>$der,
                         'ac_rep'=>$rep,
                         'archivar'=>$archi,
+                        'prohevido'=>$p->prohevido,
                     ];
                 }),
             ];
@@ -241,7 +261,12 @@ class DocumentoController extends Controller
             }
 
             // ahora si derivamos a la oficina
-            Proceso::where('id',$proceso->id)->update(['derivar'=>Carbon::now(),'oficina_ouput'=>$oficina->id,'estado_der'=>1]);
+            Proceso::where('id',$proceso->id)->update([
+                'derivar'=>Carbon::now(),
+                'oficina_ouput'=>$oficina->id,
+                'estado_der'=>1,
+                'prohevido'=>$request->prohevido,
+            ]);
             documento::where('id',$documento->id)->update(['oficina_id'=>$oficina->id]);
             //ahora creamos un nuevo registro 
             /*Proceso::create([

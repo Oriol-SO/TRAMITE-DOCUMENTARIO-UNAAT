@@ -12,5 +12,6 @@ class tiempo extends Model
         'documento_id',
         'inicio',
         'final',
+        'unidad_id'
     ];
 }

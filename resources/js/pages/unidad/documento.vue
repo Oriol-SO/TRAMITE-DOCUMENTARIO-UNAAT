@@ -2,13 +2,13 @@
 <div>
     
     <v-row>
-        <v-col cols="12" md="6">
+        <v-col cols="12" md="12">
             <datosdoc :dato="doc"/>
             <accionesdoc :dato="doc" @refresh="refrescar"/>
         </v-col>
-        <v-col cols="12" md="6">
+        <!--v-col cols="12" md="6">
             <verdoc :dato="doc" />
-        </v-col>
+        </v-col-->
     </v-row>
     
 </div>

@@ -12,5 +12,6 @@ class seguimiento extends Model
         'documento_id',
         'inicio',
         'final',
+        'unidad_id'
     ];
 }

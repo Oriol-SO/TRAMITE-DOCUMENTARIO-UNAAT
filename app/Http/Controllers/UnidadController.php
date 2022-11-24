@@ -26,7 +26,7 @@ class UnidadController extends Controller
     public function fetch_docs($id){
         $oficina=oficina::findOrFail($id);
         try{
-            $docs_entrantes=Proceso::where('oficina_ouput',$oficina->id)->get('documento_id');
+            $docs_entrantes=Proceso::where('oficina_ouput',$oficina->id )->orWhere('oficina_input',$oficina->id )->get('documento_id');
 
             $documentos=documento::whereIn('id',$docs_entrantes)->orderBy('prioridad', 'asc')->get()->map(function($d){
                     $proceso=Proceso::where('documento_id',$d->id)->orderBy('id', 'desc')->first();
@@ -49,6 +49,13 @@ class UnidadController extends Controller
                     if($archi==true){
                         $antendido=false;
                     }
+                    $est=3;
+                    if($d->resuelto==1){
+                        $est=2; 
+                    }
+                    if($d->estado==1){
+                        $est=1;
+                    }
                     return[
                         'id'=>$d->id,
                         'documento'=>$d->documento,
@@ -57,11 +64,12 @@ class UnidadController extends Controller
                         'prioridad'=>$d->prioridad,
                         'remitente'=>$d->remitente,
                         'dni'=>$d->dni,
-                        'estado'=>$d->estado,
+                        'estado'=>$est,
                         'destino'=>$d->destino,
                         'tipo'=>$d->tipo,
                         'tiempo_final'=>$d->fecha_fin,
                         'atendido'=>$antendido,    
+                        
                     ];
             });
             
@@ -154,7 +162,113 @@ class UnidadController extends Controller
            $documento->save();
            return true;
         }catch(Exception $e){
-            return response()->json(['message'=>'Error al archivar']);
+            return response()->json(['message'=>'Error al archivar'],405);
+        }
+    }
+
+    public function resolver_doc(Request $request){
+        $request->validate([
+            'documento'=>'required|numeric'
+        ]);
+        $documento=documento::findOrFail($request->documento);
+        try{
+           if($documento->estado==1){
+            return response()->json(['message'=>'El documento ya finalizó'],405);    
+           }
+           if($documento->resuelto==1){
+            return response()->json(['message'=>'El documento ya fue antendido'],405);
+           }
+           //actualizamos el documento
+           $documento->resuelto=1;
+           $documento->fecha_ate=Carbon::now();
+           $documento->fecha_fin=Carbon::now();
+           $documento->save();
+           return true;
+        }catch(Exception $e){
+            return response()->json(['message'=>'Error al anteder'],405);
+        }
+    }
+
+
+
+
+    public function add_documento_unidad(Request $request){
+        $request->validate([
+            'nombre'=>'required',
+            'remitente'=>'required',
+            'dni'=>'required|numeric',
+            //'archivo'=>'required',
+            //'destino'=>'required',
+            'tipo'=>'required',
+            'prioridad'=>'required',
+            'tipo_doc'=>'required',
+            //'numero_doc'=>'required',
+        ]);
+        try{
+            
+            $prioridad=20;
+            switch($request->prioridad){
+                case 'NORMAL':
+                    $prioridad=20;
+                    break;
+                case 'ESPECIAL':
+                    $prioridad=19;
+                    break;
+                case 'URGENTE':
+                    $prioridad=18;
+                    break;
+                case 'MUY URGENTE':
+                    $prioridad=17;
+                    break;
+                default :
+                    $prioridad=20;
+                    break;
+            }
+
+            $url='';
+            if($request->archivo){
+                $direccion='documentos';
+                $url=Storage::url($request->file('archivo')->store($direccion,'public_file'));
+            }
+
+            $doc=documento::create([
+                'documento'=>$request->nombre,
+                'fecha'=>Carbon::now(),
+                'remitente'=>$request->remitente,
+                'dni'=>$request->dni,
+                //'destino'=>$request->destino,
+                'path'=>$url,
+                'tipo'=>$request->tipo,
+                'estado'=>0,
+                'prioridad'=>$prioridad,
+                'oficina_id'=>$this->oficina,
+                'tipo_doc'=>$request->tipo_doc,
+                //'numero_doc'=>$request->numero_doc,
+                'direccion'=>$request->direccion,
+                'referencia'=>$request->referencia,
+                'anexo'=>$request->anexo,
+                'folio'=>$request->folio,
+            ]);
+            $inicio = strtotime($request->tiempo_inicio);
+            $final = strtotime($request->tiempo_fin);
+            tiempo::create([
+                'documento_id'=>$doc->id,
+                'inicio'=>date('Y-m-d H:i:s',$inicio ),
+                'final'=>date('Y-m-d H:i:s',$final ),
+            ]);
+            Proceso::create([
+                'recepcion'=>Carbon::now(),
+                'documento_id'=>$doc->id,
+                'oficina_input'=>$this->oficina,     
+                'estado_der'=>0,  
+                'estado_rep'=>1,  
+                'recibido'=>0,
+            ]);
+
+            return true;
+        }catch(Exception $e){
+            return $e;
+            return response()->json(['message'=>'Error al subir documento'],405);
         }
     }
 }

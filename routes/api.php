@@ -53,6 +53,9 @@ Route::group(['middleware' => 'guest:api'], function () {
 
 Route::get('meza-documentos',[DocumentoController::class, 'documentos']);
 Route::post('add-documento',[DocumentoController::class,'add_documento']);
+//ad documento desde unidades 
+Route::post('add-documento-unidad',[UnidadController::class,'add_documento_unidad']);
+
 Route::get('datos_doc_meza/{id}',[DocumentoController::class,'dato_doc']);
 
 Route::post('derivar-doc',[DocumentoController::class,'derrivar_doc']);
@@ -68,6 +71,8 @@ Route::post('recepcionar-doc',[UnidadController::class,'recepcionar_doc']);
 Route::post('actualizar-doc/{id}',[UnidadController::class,'cambiar_doc']);
 
 Route::post('archivar-doc',[UnidadController::class,'archivar_doc']);
+Route::post('resolver-doc',[UnidadController::class,'resolver_doc']);
+
 //administrado
 
 Route::get('get-users',[AdminController::class,'getusers']);
@@ -87,3 +92,5 @@ Route::post('exportar-excel-creaciones',[AdminController::class,'exportar_docs_t
 
 Route::get('all-oficinas',[OficinaController::class,'oficinas']);
 Route::post('cambiar-estado-oficina',[OficinaController::class,'CambiarEstado']);
+
+//a

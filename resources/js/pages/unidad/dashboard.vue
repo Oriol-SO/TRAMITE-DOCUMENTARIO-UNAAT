@@ -7,16 +7,18 @@
 
        <v-card>
             <v-card-title>
-                <v-toolbar elevation="0" >Lista de documentos </v-toolbar>
+            <v-btn v-if="!segui" @click="iniciar_tiempo_busqueda(), segui=true" class="text-capitalize" color="warning">Iniciar seguimiento</v-btn>
             <v-text-field
+            v-if="segui"
                 v-model="search"
                 append-icon="mdi-magnify"
                 label="Buscar Documento"
                 single-line
                 hide-details
+            
             ></v-text-field>
             <v-spacer></v-spacer>
-
+            <adddocumento @refresh="refresh" ruta="add-documento-unidad"/>
             </v-card-title>
             <v-data-table
             :headers="headers"
@@ -25,15 +27,26 @@
             >
             <template v-slot:[`item.action`]="{ item }">
                 <v-btn
+                v-if="item.atendido"
                 small
-                rounded
+             
                 outlined
-                color="deep-purple accent-2"
+                color="green"
                 elevation="0"
                 style="color:#fff;"
                 class="text-capitalize"
-                @click=" $router.push({ path: `/unidad-organica/documento/${item.id}`, }) "  
-                >Seguimiento</v-btn>
+                @click=" $router.push({ path: `/unidad-organica/documento/${item.id}`, }) ,finalizar_tiempo_busqueda(item.id) "  
+                >Atendido</v-btn>
+                <v-btn
+                v-else
+                small
+           
+                color="purple"
+                elevation="0"
+                style="color:#fff;"
+                class="text-capitalize"
+                @click=" $router.push({ path: `/unidad-organica/documento/${item.id}`, }) ,finalizar_tiempo_busqueda(item.id) "  
+                >Atender</v-btn>
             </template>
 
             <template v-slot:[`item.prioridad`]="{ item }">
@@ -50,28 +63,17 @@
                 v-if="item.estado==1"
                 color="green accent-3"
                 >
-                Finalizado
+                Entregado
                 </v-chip>
-
-            </template>
-            <template v-slot:[`item.atendido`]="{ item }">
-                <v-chip 
-                color="warning"
-                small
-                v-if="item.atendido"
-                >
-                    Atendido
+                <v-chip v-else-if="item.estado==2" small color="primary">
+                    Resuelto
                 </v-chip>
-                <v-chip 
-                color="grey"
-                small
-                v-else
-                >
+                <v-chip v-else-if="item.estado==3" small>
                     Pendiente
                 </v-chip>
 
             </template>
-            
+
             </v-data-table>
         </v-card>
     </v-card>
@@ -173,13 +175,13 @@ export default {
           { text: 'Codigo',align: 'start', value: 'id' },
           { text: 'Documento',align: 'start', value: 'documento' },
           { text: 'Fecha', value: 'fecha' },
-          { text: 'Responsable', value: 'remitente' },
+          { text: 'Interesado', value: 'remitente' },
           { text: 'DNI', value: 'dni' },
-          { text: 'Destino', value: 'destino' },
+          //{ text: 'Destino', value: 'destino' },
           { text: 'Tipo', value: 'tipo' },
           { text: 'Prioridad', value: 'prioridad' },
           { text: 'Estado', value: 'estado' },
-          { text: 'Actual', value: 'atendido' },
+          //{ text: 'Actual', value: 'atendido' },
           { text: '', value: 'action' },
          
         ],
@@ -205,6 +207,11 @@ export default {
         ],
         documentos:[],
         dialog:false,
+        segui:false,
+         formtiempo: new Form({
+            inicio:'0',
+            fin:'0'
+        }),
     }
    },
     mounted(){
@@ -218,6 +225,11 @@ export default {
         
     },
     methods:{
+        refresh(result){
+            if(result){
+                this.fetch_docs()
+            }
+        },
         color_pri(item){
             switch(item.prioridad){
                 case 20:
@@ -262,6 +274,21 @@ export default {
             }).catch(error=>{
                 console.log(error.response.data.message)
             })
+        },
+        iniciar_tiempo_busqueda(){
+            let tiempo=new Date();
+            this.formtiempo.inicio=tiempo
+            console.log( tiempo.toLocaleString())
+        },
+        finalizar_tiempo_busqueda(doc){
+            
+            let tiempo=new Date();
+            this.formtiempo.fin=tiempo
+            console.log( tiempo.toLocaleString())
+            this.formtiempo.post('/api/agregar-tiempo-busqueda/'+doc).then(response=>{
+                return
+            })
+            this.segui=false;
         }
     }
    

@@ -3,7 +3,9 @@
         <v-card  class="ma-3">
             <v-card-title>
                Seguimiento de tramite   
-               <v-btn color="primary" class="text-capitalize" @click="dialogdoc=true">Cambiar documento</v-btn>    
+               <!--v-btn color="primary" class="text-capitalize" @click="dialogdoc=true">Cambiar documento</v-btn-->    
+               <v-btn v-if="dato.accion" class="ml-3 text-capitalize" dark small color="green accent-3" @click="archivar(dato.id)">Archivar</v-btn>
+               <v-btn v-if="dato.accion && !dato.resuelto" class="ml-3 text-capitalize" dark small color="cyan lighten-1" @click="resolver(dato.id)">Atender</v-btn>
             </v-card-title>
             <v-card-text>
                 <v-card v-for="(proc,i) in dato.proceso" :key="i" class="mt-4">
@@ -18,13 +20,27 @@
                             <v-col cols="4">{{proc.derivar}}</v-col>
                              <v-col cols="4"><v-chip small color="green accent-3">{{proc.nom_ouput}}</v-chip></v-col>
                         </v-row>
+                        <v-row v-if="proc.prohevido">
+                            <v-col cols="12" class="py-0">
+                                <strong style="color:blue;">Prohevido:</strong> <br>
+                                <span>{{proc.prohevido}}</span>
+                            </v-col>
+                        </v-row>
                     </div>
+                    <v-card-actions>
+                        <v-text-field
+                         v-if="proc.ac_derivar"
+                         v-model="form.prohevido"
+                         label="Prohevido"
+                        >
+                        </v-text-field>
+                    </v-card-actions>
                     <v-card-actions>
                         <v-btn v-if="proc.ac_rep" small color="green accent-3" @click="recepcionar_doc(proc)">
                             Recepcionar
                         </v-btn>
                         <v-btn v-if="proc.ac_derivar" small color="primary" @click="dialog=true ,add_proc(proc.id)">Derivar</v-btn>
-                        <v-btn v-if="proc.archivar" small color="green accent-3" @click="archivar(proc)">Archivar</v-btn>
+                        
                     </v-card-actions>
                 </v-card>
               {{oficinas_fetch}}
@@ -92,6 +108,7 @@ export default {
                 oficina:'',
                 documento:'',
                 proceso:'',
+                prohevido:'',
             }),
 
             form2:new Form({
@@ -155,12 +172,25 @@ export default {
             })
         },archivar(doc){
             let form= new Form({
-                documento:doc.documento,
+                documento:doc,
             })
             if(!confirm('¿Estas seguro de realizar esta accion?')){
                 return
             }
             form.post('/api/archivar-doc').then(response=>{
+                this.$emit('refresh',true)
+            }).catch(error=>{
+                console.log(error.response.data.message);
+            })
+        },
+        resolver(doc){
+            let form= new Form({
+                documento:doc,
+            })
+            if(!confirm('¿Estas seguro de realizar esta accion?')){
+                return
+            }
+            form.post('/api/resolver-doc').then(response=>{
                 this.$emit('refresh',true)
             }).catch(error=>{
                 console.log(error.response.data.message);
