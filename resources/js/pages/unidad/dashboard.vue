@@ -177,7 +177,7 @@ export default {
           { text: 'Fecha', value: 'fecha' },
           { text: 'Interesado', value: 'remitente' },
           { text: 'DNI', value: 'dni' },
-          //{ text: 'Destino', value: 'destino' },
+           { text: 'Numero DOC', value: 'numero_doc' },
           { text: 'Tipo', value: 'tipo' },
           { text: 'Prioridad', value: 'prioridad' },
           { text: 'Estado', value: 'estado' },

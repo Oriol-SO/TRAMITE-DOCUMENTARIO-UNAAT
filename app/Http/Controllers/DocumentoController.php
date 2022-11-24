@@ -71,6 +71,7 @@ class DocumentoController extends Controller
                 'tiempo_final'=>$d->fecha_fin,
                 'atendido'=>$antendido,
                 'archivado'=>1,
+                'numero_doc'=>$d->numero_doc,
                // 'derivar'=>$der,     
             ];
         });
@@ -128,7 +129,7 @@ class DocumentoController extends Controller
                 'prioridad'=>$prioridad,
                 'oficina_id'=>1,
                 'tipo_doc'=>$request->tipo_doc,
-                //'numero_doc'=>$request->numero_doc,
+                'numero_doc'=>$request->numero_doc,
                 'direccion'=>$request->direccion,
                 'referencia'=>$request->referencia,
                 'anexo'=>$request->anexo,

@@ -69,6 +69,7 @@ class UnidadController extends Controller
                         'tipo'=>$d->tipo,
                         'tiempo_final'=>$d->fecha_fin,
                         'atendido'=>$antendido,    
+                        'numero_doc'=>$d->numero_doc,
                         
                     ];
             });
@@ -243,7 +244,7 @@ class UnidadController extends Controller
                 'prioridad'=>$prioridad,
                 'oficina_id'=>$this->oficina,
                 'tipo_doc'=>$request->tipo_doc,
-                //'numero_doc'=>$request->numero_doc,
+                'numero_doc'=>$request->numero_doc,
                 'direccion'=>$request->direccion,
                 'referencia'=>$request->referencia,
                 'anexo'=>$request->anexo,
