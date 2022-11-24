@@ -3,7 +3,7 @@
   <v-app-bar app style="background:rgb(13 129 219)" elevation="0">
 
     <v-toolbar dense elevation="0" style="background-color: transparent;  color:#fff;">
-     <!--v-img class="ml-10 mr-5" max-height="38" max-width="88" src="/img/cbmediclogo.png" /-->
+     <v-img class="ml-10 mr-5"  max-width="38" src="/img/logo-unaat.PNG" />
       <v-toolbar-title >{{ appName }}</v-toolbar-title>
       <v-spacer></v-spacer>
 
