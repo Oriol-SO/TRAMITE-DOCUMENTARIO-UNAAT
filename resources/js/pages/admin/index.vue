@@ -22,7 +22,7 @@ export default {
       { title: "Reportes", icon: "mdi-file-document",to: "admin.repo"},
       /*{ title: "Personas/Usuarios", icon: "mdi-account-multiple",to: "admin.roles"},*/
       { title: "Organos-Unidades", icon: "mdi-folder", to: "admin.oficinas" },
-       { title: "Soporte-archivos", icon: "mdi-cog", to: "admin.archivos" },
+       /*{ title: "Soporte-archivos", icon: "mdi-cog", to: "admin.archivos" },*/
    
     ],
     }

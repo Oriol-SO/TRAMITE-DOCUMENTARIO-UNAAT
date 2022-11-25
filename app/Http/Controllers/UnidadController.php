@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\documento;
+use App\Models\numero;
 use App\Models\oficina;
 use App\Models\Proceso;
 use App\Models\role;
@@ -70,6 +71,7 @@ class UnidadController extends Controller
                         'tiempo_final'=>$d->fecha_fin,
                         'atendido'=>$antendido,    
                         'numero_doc'=>$d->numero_doc,
+                        'num_corre'=>$d->num_corre,
                         
                     ];
             });
@@ -104,19 +106,32 @@ class UnidadController extends Controller
             //recivir proceso
             Proceso::where('id',$proceso->id)->update(['recibido'=>1]);
             //creamos el nuevo registro del documento
+            $fecha=Carbon::now();
+            $year = $fecha->year;
+            $num=numero::where('unidad_id',$this->oficina)->whereYear('year',$year)->count();
             proceso::create([
                 'recepcion'=>Carbon::now(),
                 'documento_id'=>$documento->id,
                 'oficina_input'=>$this->oficina,     
                 'estado_der'=>0,  
                 'estado_rep'=>1, 
+                'num_corre'=>$num+1,
+            ]);          
+            numero::create([
+                'numero'=>$num+1,
+                'unidad_id'=>$this->oficina,
+                'year'=>$fecha,
+                'documento_id'=>$documento->id,
+                'tipo'=>2,
             ]);
+            return true;
            // documento::where('id')
 
         }catch(Exception $e){
             return response()->json(['messager'=>'Error al recepcionar documento'],405);
         }
     }
+
     public function cambiar_doc(Request $request,$id){
         $request->validate([
             'documento'=>'required|numeric',
@@ -196,14 +211,14 @@ class UnidadController extends Controller
     public function add_documento_unidad(Request $request){
         $request->validate([
             'nombre'=>'required',
-            'remitente'=>'required',
-            'dni'=>'required|numeric',
+            //'remitente'=>'required',
+            //'dni'=>'required|numeric',
             //'archivo'=>'required',
             //'destino'=>'required',
             'tipo'=>'required',
             'prioridad'=>'required',
             'tipo_doc'=>'required',
-            //'numero_doc'=>'required',
+            'numero_doc'=>'required',
         ]);
         try{
             
@@ -249,6 +264,7 @@ class UnidadController extends Controller
                 'referencia'=>$request->referencia,
                 'anexo'=>$request->anexo,
                 'folio'=>$request->folio,
+                'provehido'=>$request->provehido,
             ]);
             $inicio = strtotime($request->tiempo_inicio);
             $final = strtotime($request->tiempo_fin);
@@ -266,11 +282,33 @@ class UnidadController extends Controller
                 'estado_rep'=>1,  
                 'recibido'=>0,
             ]);
+            $anio=Carbon::now();
+            $year = $anio->year;
+            $numer=numero::where('unidad_id',$this->oficina)->whereYear('year',$year)->count();
+            numero::create([
+                'numero'=>$numer+1,
+                'unidad_id'=>$this->oficina,
+                'year'=>$anio,
+                'documento_id'=>$doc->id,
+            ]);
 
             return true;
         }catch(Exception $e){
             return $e;
             return response()->json(['message'=>'Error al subir documento'],405);
         }
+    }
+
+
+    public function obtener_numero(){
+        try{
+            $fecha=Carbon::now();
+            $year = $fecha->year;
+            $numero=numero::where('unidad_id',$this->oficina)->whereYear('year',$year)->count();
+            return $numero+1;
+        }catch(Exception $e){
+            return response()->json(['message'=>'No se puede obtener el numero correlativo'],405);
+        }
+
     }
 }

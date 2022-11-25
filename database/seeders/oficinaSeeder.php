@@ -20,7 +20,7 @@ class oficinaSeeder extends Seeder
             ],
             [
             'id' => 1,
-            'nombre' => 'Meza de partes',
+            'nombre' => 'Mesa de partes',
             ],
             [
             'id' => 2,

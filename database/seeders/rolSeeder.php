@@ -22,7 +22,7 @@ class rolSeeder extends Seeder
             ],
             [
             'id' => 2,
-            'nombre' => 'Meza de partes',
+            'nombre' => 'Mesa de partes',
             'estado' => 1,
             //'oficina_id'=>1,
             ],

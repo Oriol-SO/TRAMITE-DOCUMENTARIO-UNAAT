@@ -322,9 +322,47 @@ class AdminController extends Controller
         return true;
         
     }
+
     public function estado_oficina($id,$estado){
         $ofi=oficina::findOrFail($id);
         $ofi->estado=!$estado;
         $ofi->save();
+    }
+
+    public function eliminar_derivacion(Request $request){
+        $request->validate([
+            'proceso'=>'required|numeric',
+            'documento'=>'required|numeric',
+        ]);
+
+        $documento=documento::findOrFail($request->documento);
+        $proceso=Proceso::findOrFail($request->proceso);
+        try{
+
+            if($documento->id!=$proceso->documento_id){
+                return response()->json(['message'=>'los documentos no coinciden'],405);
+            }
+            if($documento->estado==1){
+                return response()->json(['message'=>'El documento ya finalizó'],405);
+            }
+            if($documento->resuelto==1){
+                return response()->json(['message'=>'El documento ya fue atendido'],405);
+            }
+            if($proceso->oficina_input==null || $proceso->oficina_ouput==null){
+                return response()->json(['message'=>'No puedes eliminar .'],405);
+            }
+            if($proceso->derivar==1 && $proceso->recibido!=1 && $proceso->estado_der==1){
+                return response()->json(['message'=>'No puedes eliminar ...'],405);
+            }
+            //eliminamos la derivacion
+            $proceso->oficina_ouput=null;
+            $proceso->derivar=null;
+            
+            return 'eliminado';
+
+        }catch(Exception $e){
+            return $e;
+            return response()->json(['message'=>'Error al eliminar proceso'],405);
+        }
     }
 }

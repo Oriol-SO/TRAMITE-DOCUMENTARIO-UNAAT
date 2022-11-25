@@ -29,5 +29,7 @@ class documento extends Model
         'resuelto',
         'fecha_ate',
         'asunto',
+        'provehido',
+        'num_corre'
     ];
 }

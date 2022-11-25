@@ -7,7 +7,7 @@
 
        <v-card>
             <v-card-title>
-            <v-btn v-if="!segui" @click="iniciar_tiempo_busqueda(), segui=true" class="text-capitalize" color="warning">Iniciar seguimiento</v-btn>
+            <v-btn v-if="!segui" @click="iniciar_tiempo_busqueda(), segui=true" class="text-capitalize" color="warning">Buscar Documento</v-btn>
             <v-text-field
             v-if="segui"
                 v-model="search"
@@ -36,7 +36,7 @@
                 style="color:#fff;"
                 class="text-capitalize"
                 @click=" $router.push({ path: `/meza-de-partes/documento/${item.id}`, }) ,finalizar_tiempo_busqueda(item.id) "  
-                >Atendido</v-btn>
+                >Seguimiento</v-btn>
                  <v-btn
                 small
                 v-else
@@ -46,7 +46,7 @@
                 style="color:#fff;"
                 class="text-capitalize"
                 @click=" $router.push({ path: `/meza-de-partes/documento/${item.id}`, }) ,finalizar_tiempo_busqueda(item.id) "  
-                >Atender</v-btn>
+                >Seguimiento</v-btn>
             </template>
             <template v-slot:[`item.prioridad`]="{ item }">
                 <v-chip
@@ -62,10 +62,10 @@
                 v-if="item.estado==1"
                 color="green accent-3"
                 >
-                Entregado
+                Archivado
                 </v-chip>
                 <v-chip v-else-if="item.estado==2" small color="primary">
-                    Resuelto
+                    Atendido
                 </v-chip>
                 <v-chip v-else-if="item.estado==3" small>
                     Pendiente

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\documento;
+use App\Models\numero;
 use App\Models\oficina;
 use App\Models\Proceso;
 use App\Models\role;
@@ -72,6 +73,7 @@ class DocumentoController extends Controller
                 'atendido'=>$antendido,
                 'archivado'=>1,
                 'numero_doc'=>$d->numero_doc,
+                'num_corre'=>$d->num_corre,
                // 'derivar'=>$der,     
             ];
         });
@@ -80,15 +82,15 @@ class DocumentoController extends Controller
     public function add_documento(Request $request){
         
         $request->validate([
-            'nombre'=>'required',
-            'remitente'=>'required',
-            'dni'=>'required|numeric',
+            //'nombre'=>'required',
+            //'remitente'=>'required',
+            //'dni'=>'required|numeric',
             //'archivo'=>'required',
             //'destino'=>'required',
             'tipo'=>'required',
             'prioridad'=>'required',
             'tipo_doc'=>'required',
-            //'numero_doc'=>'required',
+            'numero_doc'=>'required',
         ]);
         try{
             
@@ -116,24 +118,30 @@ class DocumentoController extends Controller
                 $direccion='documentos';
                 $url=Storage::url($request->file('archivo')->store($direccion,'public_file'));
             }
+            $anio=Carbon::now();
+            $year = $anio->year;
+            $numer=numero::where('unidad_id',$this->oficina)->whereYear('year',$year)->count();
 
             $doc=documento::create([
                 'documento'=>$request->nombre,
                 'fecha'=>Carbon::now(),
                 'remitente'=>$request->remitente,
                 'dni'=>$request->dni,
+                //'folio'=>$request->folio,
                 //'destino'=>$request->destino,
                 'path'=>$url,
                 'tipo'=>$request->tipo,
                 'estado'=>0,
                 'prioridad'=>$prioridad,
-                'oficina_id'=>1,
+                'oficina_id'=>$this->oficina,
                 'tipo_doc'=>$request->tipo_doc,
                 'numero_doc'=>$request->numero_doc,
                 'direccion'=>$request->direccion,
                 'referencia'=>$request->referencia,
                 'anexo'=>$request->anexo,
                 'folio'=>$request->folio,
+                'provehido'=>$request->provehido,
+                'num_corre'=>$numer+1,
             ]);
             $inicio = strtotime($request->tiempo_inicio);
             $final = strtotime($request->tiempo_fin);
@@ -146,10 +154,19 @@ class DocumentoController extends Controller
             Proceso::create([
                 'recepcion'=>Carbon::now(),
                 'documento_id'=>$doc->id,
-                'oficina_input'=>1,     
+                'oficina_input'=>$this->oficina,     
                 'estado_der'=>0,  
                 'estado_rep'=>1,  
                 'recibido'=>0,
+                'num_corre'=>$numer+1,
+            ]);
+            
+            numero::create([
+                'numero'=>$numer+1,
+                'unidad_id'=>$this->oficina,
+                'year'=>$anio,
+                'documento_id'=>$doc->id,
+                'tipo'=>1,
             ]);
 
             return true;
@@ -201,7 +218,12 @@ class DocumentoController extends Controller
                 'dni'=>$d->dni,
                 'estado'=>$d->estado,
                 'destino'=>$d->destino,
+                'numero'=>$d->numero_doc,
                 'tipo'=>$d->tipo,
+                'folio'=>$d->folio,
+                'doc_tipo'=>$d->tipo_doc,
+                'prioridad'=>$this->prioridad($d->prioridad),
+                'provehido'=>$d->provehido,
                 'resuelto'=>$d->resuelto,
                 'tiempo_creacion'=>$date,
                 'tiempo_final'=>$d->fecha_fin,
@@ -233,9 +255,12 @@ class DocumentoController extends Controller
                         'nom_ouput'=>$oficina_o?$oficina_o->nombre:null,
                         'ac_derivar'=>$der,
                         'ac_rep'=>$rep,
+                        'numero'=>$p->numero,
+                        'tipo'=>$p->tipo,
                         'archivar'=>$archi,
                         'prohevido'=>$p->prohevido,
                         'asunto'=>$p->asunto,
+                        'num_corre'=>$this->oficina==$p->oficina_input?$p->num_corre:null,
                     ];
                 }),
             ];
@@ -270,6 +295,8 @@ class DocumentoController extends Controller
                 'estado_der'=>1,
                 'prohevido'=>$request->prohevido,
                 'asunto'=>$request->asunto,
+                'numero'=>$request->numero,
+                'tipo'=>$request->tipo,
             ]);
             documento::where('id',$documento->id)->update(['oficina_id'=>$oficina->id]);
             //ahora creamos un nuevo registro 
@@ -286,8 +313,6 @@ class DocumentoController extends Controller
         
         
     }
-
-
     public function agregar_tiempo_doc(Request $request,$id){
         if($request->inicio=='0' || $request->fin=='0'){
             return false;
@@ -302,6 +327,81 @@ class DocumentoController extends Controller
             'final'=>date('Y-m-d H:i:s',$final ),
             'unidad_id'=>$this->oficina,
         ]);
+    }
+
+    public function prioridad($prioridad){
+        switch($prioridad){
+            case 20:
+                return 'NORMAL';
+            case 19:
+                return 'ESPECIAL';
+            case 18:
+                return 'URGENTE';
+            case 17:
+                return 'MUY URGENTE';
+            default:
+                return '';
+        }
+    }
+
+    public function cambiar_datos(Request $request){
+        $request->validate([
+            'id'=>'required|numeric',
+            //'documento'=>'required',
+            //'remitente'=>'required',
+            //'dni'=>'required',
+            'numero'=>'required',
+            'tipo'=>'required',
+            'doc_tipo'=>'required',
+            'prioridad'=>'required',
+
+            //'provehido'=>'required',
+        ]);
+        $documento=documento::findOrFail($request->id);
+        try{
+            $prioridad=20;
+            switch($request->prioridad){
+                case 'NORMAL':
+                    $prioridad=20;
+                    break;
+                case 'ESPECIAL':
+                    $prioridad=19;
+                    break;
+                case 'URGENTE':
+                    $prioridad=18;
+                    break;
+                case 'MUY URGENTE':
+                    $prioridad=17;
+                    break;
+                default :
+                    $prioridad=20;
+                    break;
+            }
+            
+            $procesos=Proceso::where('documento_id',$documento->id)->get();
+            if(count($procesos)>1){
+                return response()->json(['message'=>'Este documento ya fue derivado mas de una vez , no puedes hacer cambios'],405);
+            }
+            if($procesos[0]['oficina_ouput']!=null || $procesos[0]['estado_der']==1){
+                return response()->json(['message'=>'Este documento ya fue derivado no puedes hacer cambios'],405);
+            }
+            //editamos
+            documento::where('id',$documento->id)->update([
+                'documento'=>$request->documento,
+                'remitente'=>$request->remitente,
+                'dni'=>$request->dni,
+                'tipo'=>$request->tipo,
+                'prioridad'=>$prioridad,
+                'tipo_doc'=>$request->doc_tipo,
+                'numero_doc'=>$request->numero,
+                'folio'=>$request->folio,
+                'provehido'=>$request->provehido,
+            ]);
+            return 'actualizado';
+        }catch(Exception $e){
+            return $e;
+            return response()->json(['message'=>'Error al editar'],405);
+        }
     }
 }
 

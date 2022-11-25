@@ -97,5 +97,9 @@ Route::post('cambiar-estado-oficina',[OficinaController::class,'CambiarEstado'])
 
 
 Route::get('documentos-archivo',[AdminController::class,'documentos_archivo']);
+Route::post('eliminar-derivacion',[AdminController::class,'eliminar_derivacion']);
 
+Route::post('cambiar-datos-doc',[DocumentoController::class, 'cambiar_datos']);
+
+Route::get('obtener-numero',[UnidadController::class,'obtener_numero']);
 //a

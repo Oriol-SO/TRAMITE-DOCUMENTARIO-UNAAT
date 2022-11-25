@@ -66,6 +66,9 @@ export default {
         del_proc(proc){
             this.form.proceso=proc.id;
             this.form.documento=proc.documento_id;
+            this.form.post('/api/eliminar-derivacion').then(response=>{
+
+            })
         },  
     }
 }

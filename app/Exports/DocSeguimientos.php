@@ -83,5 +83,6 @@ class DocSeguimientos implements FromCollection,WithTitle,WithHeadings,WithStyle
         });
 
         return $seguis;
-    }
+    }  
+    
 }

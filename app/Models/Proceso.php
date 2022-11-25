@@ -18,6 +18,9 @@ class Proceso extends Model
         'estado_der',
         'estado_rep',
         'recibido',
-        'prohevido'
+        'prohevido',
+        'tipo',
+        'numero',
+        'num_corre'
     ];
 }

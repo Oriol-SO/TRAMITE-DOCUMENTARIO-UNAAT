@@ -3,7 +3,7 @@
     
     <v-row>
         <v-col cols="12" md="12">
-            <datosdoc :dato="doc"/>
+            <datosdoc :dato="doc" @refresh="refrescar"/>
             <accionesdoc :dato="doc" @refresh="refrescar"/>
         </v-col>
         <!--v-col cols="12" md="6">
