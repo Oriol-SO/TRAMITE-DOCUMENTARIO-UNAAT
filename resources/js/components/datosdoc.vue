@@ -137,7 +137,7 @@
                         :items="['RESOLUCION',
                                 'MEMORANDO MULTIPLE',
                                 'MEMORANDO',
-                                'PROVEHIDO',
+                                'PROVEIDO',
                                 'INFORME',
                                 'INFORME TECNICO',
                                 'INFORME LEGAL',
