@@ -119,9 +119,9 @@ class ImpresionExport implements FromCollection,WithTitle,WithHeadings,WithStyle
                 'DOCUMENTO'=>$d->tipo,
                 'NUMERO DOCUMENTO'=>$d->numero_doc,
                 'ASUNTO'=>$d->documento,
+                'DOCUMENTO TIPO'=>$d->tipo_doc,
                 'INTERESADO'=>$d->remitente,
                 'PRIORIDAD'=>$this->prioridad($d->prioridad),
-                'DOCUMENTO TIPO'=>$d->tipo_doc,
                 'FECHA DE CULMINACION'=>$d->fecha_fin,
                 //'DURACION DIAS'=>$duracion?$duracion:'0',
             ];
