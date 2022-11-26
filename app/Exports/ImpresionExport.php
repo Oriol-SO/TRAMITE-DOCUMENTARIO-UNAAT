@@ -78,9 +78,9 @@ class ImpresionExport implements FromCollection,WithTitle,WithHeadings,WithStyle
                 'DOCUMENTO',
                 'NUMERO DOCUMENTO',
                 'ASUNTO',
+                'DOCUMENTO TIPO',
                 'INTERESADO',
                 'PRIORIDAD',
-                'DOCUMENTO TIPO',
                 'FECHA DE CULMINACION',
                // 'DURACION DIAS',
             ]

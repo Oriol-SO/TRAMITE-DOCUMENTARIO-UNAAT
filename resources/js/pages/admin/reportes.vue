@@ -77,7 +77,7 @@
                 elevation="0"
                 style="color:#fff;"
                 class="text-capitalize"
-                @click="ver_proc(item)"  
+                @click="ver_docs(item)"  
                 >Editar</v-btn>
             </template>
             
@@ -154,6 +154,7 @@
                 </v-card-actions>
             </v-card>
         </v-dialog>
+
         <v-dialog
         v-model="dialog_proc"
         max-width="500"
@@ -201,7 +202,7 @@
         </v-dialog>
         
         <v-dialog
-        v-model="dialog_proc"
+        v-model="dialog_editar"
         fullscreen
         hide-overlay
         transition="dialog-bottom-transition"
@@ -218,7 +219,7 @@
                         dark
                         text
                         rounded
-                        @click="dialog_proc = false"
+                        @click="dialog_editar = false"
                         >
                         Cerrar
                         </v-btn>
@@ -266,7 +267,7 @@ export default {
             fecha2:'',
             tipo:'',
         }),
-        dialog_proc:false,
+        dialog_editar:false,
         
     }
    },mounted(){
@@ -287,6 +288,10 @@ export default {
             this.doc=item;
             this.dialog=true
             
+        },
+        ver_docs(item){
+            this.doc=item;
+            this.dialog_editar=true
         },
         procesos(){
             this.dialog_proc=true;

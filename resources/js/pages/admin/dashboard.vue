@@ -59,7 +59,7 @@
                         >
                             <v-text-field
                             v-model="form.nombre"
-                            label="Nombre"
+                            label="Nombre Completo"
                             required
                             ></v-text-field>
                         </v-col>
@@ -69,7 +69,7 @@
                         sm="6">
                             <v-text-field
                             v-model="form.correo"
-                            label="Correo Electronico"
+                            label="Correo Institucional"
                             required
                             ></v-text-field>
                         </v-col>

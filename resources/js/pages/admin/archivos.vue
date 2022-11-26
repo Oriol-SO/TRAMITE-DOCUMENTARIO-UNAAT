@@ -31,7 +31,7 @@
                 elevation="0"
                 style="color:#fff;"
                 class="text-capitalize"
-                @click="ver(item)"  
+                @click="ver_docs(item)"  
                 >Ver proceso</v-btn>
             </template>
             
@@ -117,6 +117,10 @@ export default {
         ver(item){
             this.doc=item;
             this.dialog=true
+        },
+        ver_docs(item){
+            this.doc=item;
+            this.dialog_proc=true
         },
         procesos(){
             this.dialog_proc=true;

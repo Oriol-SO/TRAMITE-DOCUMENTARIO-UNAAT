@@ -63,9 +63,9 @@ class DocumentoExport implements FromCollection,WithTitle,WithHeadings,WithStyle
                 'DOCUMENTO',
                 'NUMERO DOCUMENTO',
                 'ASUNTO',
+                'DOCUMENTO TIPO',
                 'INTERESADO',
                 'PRIORIDAD',
-                'DOCUMENTO TIPO',
                 'FECHA DE CULMINACION',
                // 'DURACION DIAS',
             ]
@@ -98,9 +98,9 @@ class DocumentoExport implements FromCollection,WithTitle,WithHeadings,WithStyle
                 'DOCUMENTO'=>$d->tipo,
                 'NUMERO DOCUMENTO'=>$d->numero_doc,
                 'ASUNTO'=>$d->documento,
-                'INTERESADO'=>$d->remitente,
-                'PRIORIDAD'=>$this->prioridad($d->prioridad),
                 'DOCUMENTO TIPO'=>$d->tipo_doc,
+                'INTERESADO'=>$d->remitente,
+                'PRIORIDAD'=>$this->prioridad($d->prioridad),      
                 'FECHA DE CULMINACION'=>$d->fecha_fin,
                 //'DURACION DIAS'=>$duracion?$duracion:'0',
             ];
