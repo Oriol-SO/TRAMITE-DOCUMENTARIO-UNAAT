@@ -75,9 +75,9 @@ export default {
     },
     methods:{
         del_proc(proc){
-            if(!confirm('¿Estas seguro de realizar esta acción?')){
+            /*if(!confirm('¿Estas seguro de realizar esta acción?')){
                 return
-            }
+            }*/
             this.form.proceso=proc.id;
             this.form.documento=proc.documento_id;
             this.form.post('/api/eliminar-derivacion').then(response=>{

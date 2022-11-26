@@ -219,9 +219,9 @@ export default {
             this.form.reset();
             this.form2.documento=doc.documento;
             this.form2.proceso=doc.id;
-            if(!confirm('¿Estas seguro de realizar esta accion?')){
+           /* if(!confirm('¿Estas seguro de realizar esta accion?')){
                 return
-            }
+            }*/
             this.form.reset()
             this.form2.post('/api/recepcionar-doc').then(response=>{
                 this.$emit('refresh',true)
@@ -245,9 +245,9 @@ export default {
             let form= new Form({
                 documento:doc,
             })
-            if(!confirm('¿Estas seguro de realizar esta accion?')){
+           /* if(!confirm('¿Estas seguro de realizar esta accion?')){
                 return
-            }
+            }*/
             form.post('/api/archivar-doc').then(response=>{
                 this.$emit('refresh',true)
             }).catch(error=>{
@@ -258,9 +258,9 @@ export default {
             let form= new Form({
                 documento:doc,
             })
-            if(!confirm('¿Estas seguro de realizar esta accion?')){
+           /* if(!confirm('¿Estas seguro de realizar esta accion?')){
                 return
-            }
+            }*/
             form.post('/api/resolver-doc').then(response=>{
                 this.$emit('refresh',true)
             }).catch(error=>{
