@@ -20,7 +20,7 @@
 
             <v-btn class="ml-auto mr-2 text-capitalize" dark color="purple" small @click="exportar_tiempos()">Tiempos de registro </v-btn>
             <v-btn class="ml-auto mr-2 text-capitalize" dark color="primary" small @click="exportar_tiempos_seguis()">Tiempos de seguimiento</v-btn>
-            <v-btn class="ml-auto mr-2 text-capitalize" color="green accent-3" small @click="exportar_docs()">Reporte de documentos</v-btn>
+            <v-btn class="ml-auto mr-2 text-capitalize" color="green accent-3" small @click="exportar_docs()">Imprimir</v-btn>
            
             </v-card-title>
             <v-card elevation="0">
@@ -249,14 +249,13 @@ export default {
         doc:[],
         headers: [
           { text: 'Codigo',align: 'start', value: 'id' },
-          { text: 'Asunto',align: 'start', value: 'documento' },
           { text: 'Fecha', value: 'fecha' },
+          { text: 'Documento', value: 'tipo' },
+          { text: 'Numero DOC', value: 'numero_doc' },
+          { text: 'Asunto',align: 'start', value: 'documento' },
+          { text: 'Tipo doc', value: 'tipo_doc' },
           { text: 'Interesado', value: 'remitente' },
-          { text: 'DNI', value: 'dni' },
-          { text: 'Numero doc', value: 'numero' },
-          { text: 'Tipo', value: 'tipo' },
-          { text: 'Fecha final', value: 'fecha_fin' },
-          { text: 'Tipo documento', value: 'tipo_doc' },
+
           {text:'prioridad', value:'nombre_prioridad'},
           { text: '', value: 'action' },      
           { text: '', value: 'editar' },     

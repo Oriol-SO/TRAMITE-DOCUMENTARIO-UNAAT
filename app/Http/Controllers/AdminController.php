@@ -200,6 +200,7 @@ class AdminController extends Controller
                 'tipo'=>$d->tipo,
                 'tipo_doc'=>$d->tipo_doc,
                 'numero'=>$d->numero_doc,
+                'numero_doc'=>$d->numero_doc,
                 'tiempo_final'=>$d->fecha_fin,
                 'estado'=>$est,
                 'estado_fin'=>$d->estado,

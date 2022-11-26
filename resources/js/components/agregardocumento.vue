@@ -15,7 +15,7 @@
                  {{tipo_documents}}
                     
                     <v-row>
-                        <v-col cols="4">
+                        <v-col cols="6">
                             <v-select
                             v-model="form.tipo_doc"
                             :items="tipos_docs"
@@ -23,29 +23,29 @@
                             >
                             </v-select>
                         </v-col>
-                        <v-col cols="4">
+                        <v-col cols="6">
                             <v-select
                             :items="tipos"
                             v-model="form.tipo"
-                            label="Tipo de archivo"
+                            label="Documento"
                             ></v-select>
                         </v-col>
-                        <v-col cols="4">
+                        <!--v-col cols="4">
                             <v-text-field
                             v-model="form.provehido"
                             label="Provehido"
                             >
                             </v-text-field>
-                        </v-col>
+                        </v-col-->
 
-                        <v-col cols="4">
+                        <v-col cols="6">
                             <v-text-field
                             v-model="form.numero_doc"
                             label="Numero de documento"
                             >
                             </v-text-field>
                         </v-col>
-                        <v-col cols="4">
+                        <v-col cols="6">
                         <v-text-field
                         v-model="form.folio"
                         label="Folios"

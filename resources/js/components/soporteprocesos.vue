@@ -27,13 +27,13 @@
                                 <span>{{proc.asunto}}</span>
                             </v-col>
                             <v-col cols="12" sm="3" class="py-0">
-                                <strong style="color:blue;">Tipo:</strong> <br>
+                                <strong style="color:blue;">Tipo ed documento:</strong> <br>
                                 <span>{{proc.tipo}}</span>
                             </v-col>
-                            <v-col v-if="proc.prohevido" cols="12" sm="3" class="py-0">
+                            <!--v-col v-if="proc.prohevido" cols="12" sm="3" class="py-0">
                                 <strong style="color:blue;">Provehido:</strong> <br>
                                 <span>{{proc.prohevido}}</span>
-                            </v-col>
+                            </v-col-->
                         </v-row>
                         <v-row>
                             <v-col cols="12" class="py-0">

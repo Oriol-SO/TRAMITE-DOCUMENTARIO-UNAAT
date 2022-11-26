@@ -32,12 +32,12 @@
                                 <strong style="color:blue;">Asunto:</strong> <br>
                                 <span>{{proc.asunto}}</span>
                             </v-col>
-                            <v-col cols="4" class="py-0">
+                            <!--v-col cols="4" class="py-0">
                                 <strong style="color:blue;">Provehido:</strong> <br>
                                 <span>{{proc.prohevido}}</span>
-                            </v-col>
+                            </v-col-->
                             <v-col cols="4" class="py-0">
-                                <strong style="color:blue;">Tipo:</strong> <br>
+                                <strong style="color:blue;">Tipo de documento:</strong> <br>
                                 <span>{{proc.tipo}}</span>
                             </v-col>
                         </v-row>
@@ -76,12 +76,12 @@
                         >
 
                         </v-select>
-                        <v-text-field
+                        <!--v-text-field
                          v-if="proc.ac_derivar"
                          v-model="form.prohevido"
                          label="Provehido"
                         >
-                        </v-text-field>
+                        </v-text-field-->
                     </v-card-actions>
                     
                     <v-card-actions>

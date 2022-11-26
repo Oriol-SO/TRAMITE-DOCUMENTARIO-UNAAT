@@ -75,6 +75,9 @@
             </template>
 
             </v-data-table>
+            <div class="ma-2 pb-2">
+                <imprimir />
+            </div>
         </v-card>
     </v-card>
 
@@ -173,12 +176,13 @@ export default {
         search: '',
         headers: [
           { text: 'Codigo',align: 'start', value: 'id' },
-          { text: 'Asunto',align: 'start', value: 'documento' },
           { text: 'Fecha', value: 'fecha' },
+          { text: 'Documento', value: 'tipo' },
+          { text: 'Numero DOC', value: 'numero_doc' },
+          { text: 'Asunto',align: 'start', value: 'documento' },
+          { text: 'Tipo doc', value: 'tipo_doc' },
           { text: 'Interesado', value: 'remitente' },
-          { text: 'DNI', value: 'dni' },
-           { text: 'Numero DOC', value: 'numero_doc' },
-          { text: 'Tipo', value: 'tipo' },
+
           { text: 'Prioridad', value: 'prioridad' },
           { text: 'Estado', value: 'estado' },
           //{ text: 'Actual', value: 'atendido' },

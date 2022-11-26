@@ -51,55 +51,60 @@ Route::group(['middleware' => 'guest:api'], function () {
     Route::get('oauth/{driver}/callback', [OAuthController::class, 'handleCallback'])->name('oauth.callback');
 });
 
-Route::get('meza-documentos',[DocumentoController::class, 'documentos']);
-Route::post('add-documento',[DocumentoController::class,'add_documento']);
-//ad documento desde unidades 
-Route::post('add-documento-unidad',[UnidadController::class,'add_documento_unidad']);
 
-Route::get('datos_doc_meza/{id}',[DocumentoController::class,'dato_doc']);
+Route::group(['middleware' => 'auth:api'], function () {
+    Route::get('meza-documentos',[DocumentoController::class, 'documentos']);
+    Route::post('add-documento',[DocumentoController::class,'add_documento']);
+    //ad documento desde unidades 
+    Route::post('add-documento-unidad',[UnidadController::class,'add_documento_unidad']);
 
-Route::post('derivar-doc',[DocumentoController::class,'derrivar_doc']);
+    Route::get('datos_doc_meza/{id}',[DocumentoController::class,'dato_doc']);
 
-Route::get('fetch-oficinas',[OficinaController::class,'fetch_oficinas']);
+    Route::post('derivar-doc',[DocumentoController::class,'derrivar_doc']);
 
-Route::post('agregar-tiempo-busqueda/{id}',[DocumentoController::class,'agregar_tiempo_doc']);
-//unidad organida
+    Route::get('fetch-oficinas',[OficinaController::class,'fetch_oficinas']);
 
-Route::get('unidad-documentos/{id}',[UnidadController::class,'fetch_docs']);
-Route::post('recepcionar-doc',[UnidadController::class,'recepcionar_doc']);
+    Route::post('agregar-tiempo-busqueda/{id}',[DocumentoController::class,'agregar_tiempo_doc']);
+    //unidad organida
 
-Route::post('actualizar-doc/{id}',[UnidadController::class,'cambiar_doc']);
+    Route::get('unidad-documentos/{id}',[UnidadController::class,'fetch_docs']);
+    Route::post('recepcionar-doc',[UnidadController::class,'recepcionar_doc']);
 
-Route::post('archivar-doc',[UnidadController::class,'archivar_doc']);
-Route::post('resolver-doc',[UnidadController::class,'resolver_doc']);
+    Route::post('actualizar-doc/{id}',[UnidadController::class,'cambiar_doc']);
 
-//administrado
+    Route::post('archivar-doc',[UnidadController::class,'archivar_doc']);
+    Route::post('resolver-doc',[UnidadController::class,'resolver_doc']);
 
-Route::get('get-users',[AdminController::class,'getusers']);
-Route::get('get-roles',[AdminController::class,'roles']);
-Route::get('get-oficinas',[AdminController::class,'oficinas']);
-Route::post('add-user',[AdminController::class,'add_user']);
-Route::post('edit-user/{id}',[AdminController::class,'editar_user']);
+    //administrado
 
-Route::get('get-documentos-rep',[AdminController::class,'documentos_rep']);
-Route::post('buscar-fechas',[AdminController::class,'buscar_fechas']);
-Route::post('add-oficina',[AdminController::class,'add_oficina']);
+    Route::get('get-users',[AdminController::class,'getusers']);
+    Route::get('get-roles',[AdminController::class,'roles']);
+    Route::get('get-oficinas',[AdminController::class,'oficinas']);
+    Route::post('add-user',[AdminController::class,'add_user']);
+    Route::post('edit-user/{id}',[AdminController::class,'editar_user']);
 
-Route::post('exportar-excel',[AdminController::class,'exportar_docs']);
-Route::post('exportar-excel-seguimientos',[AdminController::class,'exportar_docs_seguimiento']);
-Route::post('exportar-excel-seguimientos-oficinas',[AdminController::class,'exportar_docs_seguimiento_ofic']);
-Route::post('exportar-excel-creaciones',[AdminController::class,'exportar_docs_tiempos']);
-Route::post('exportar-seguimientos',[AdminController::class,'exportar_seguimientos']);
+    Route::get('get-documentos-rep',[AdminController::class,'documentos_rep']);
+    Route::post('buscar-fechas',[AdminController::class,'buscar_fechas']);
+    Route::post('add-oficina',[AdminController::class,'add_oficina']);
 
-
-Route::get('all-oficinas',[OficinaController::class,'oficinas']);
-Route::post('cambiar-estado-oficina',[OficinaController::class,'CambiarEstado']);
+    Route::post('exportar-excel',[AdminController::class,'exportar_docs']);
+    Route::post('exportar-excel-seguimientos',[AdminController::class,'exportar_docs_seguimiento']);
+    Route::post('exportar-excel-seguimientos-oficinas',[AdminController::class,'exportar_docs_seguimiento_ofic']);
+    Route::post('exportar-excel-creaciones',[AdminController::class,'exportar_docs_tiempos']);
+    Route::post('exportar-seguimientos',[AdminController::class,'exportar_seguimientos']);
 
 
-Route::get('documentos-archivo',[AdminController::class,'documentos_archivo']);
-Route::post('eliminar-derivacion',[AdminController::class,'eliminar_derivacion']);
+    Route::get('all-oficinas',[OficinaController::class,'oficinas']);
+    Route::post('cambiar-estado-oficina',[OficinaController::class,'CambiarEstado']);
 
-Route::post('cambiar-datos-doc',[DocumentoController::class, 'cambiar_datos']);
 
-Route::get('obtener-numero',[UnidadController::class,'obtener_numero']);
-//a
+    Route::get('documentos-archivo',[AdminController::class,'documentos_archivo']);
+    Route::post('eliminar-derivacion',[AdminController::class,'eliminar_derivacion']);
+
+    Route::post('cambiar-datos-doc',[DocumentoController::class, 'cambiar_datos']);
+
+    Route::get('obtener-numero',[UnidadController::class,'obtener_numero']);
+    //a
+    Route::post('imprimir',[UnidadController::class,'imprimir']);
+
+});

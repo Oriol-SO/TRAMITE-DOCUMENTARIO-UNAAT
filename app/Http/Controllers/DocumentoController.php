@@ -29,7 +29,7 @@ class DocumentoController extends Controller
 
     public function documentos(){
         $num=1;
-        return documento::where('id','<>',null)->orderBy('id', 'desc')->get()->map(function($d)use(&$num){
+        return documento::where('id','<>',null)->orderBy('prioridad', 'asc')->get()->map(function($d)use(&$num){
             $proceso=Proceso::where('documento_id',$d->id)->orderBy('id', 'desc')->first();
                 $der=false;
                 $rep=false;
@@ -69,6 +69,7 @@ class DocumentoController extends Controller
                 'prioridad'=>$d->prioridad,
                 'destino'=>$d->destino,
                 'tipo'=>$d->tipo,
+                'tipo_doc'=>$d->tipo_doc,
                 'tiempo_final'=>$d->fecha_fin,
                 'atendido'=>$antendido,
                 'archivado'=>1,
@@ -201,11 +202,16 @@ class DocumentoController extends Controller
         $tiempo=tiempo::where('documento_id',$d->id)->first();
         $date=$this->tiempo($tiempo->inicio,$tiempo->final);
         $pro=Proceso::where('documento_id',$d->id)->orderBy('id','desc')->first();
+        $pro_i=Proceso::where('documento_id',$d->id)->first();
        // $oficina_i=oficina::where('id',$pro->oficina_input)->first();
         //$oficina_o=oficina::where('id',$pro->oficina_ouput)->first();
         $der=false;
         if($d->estado==0 && $this->oficina==$pro->oficina_input && $pro->oficina_ouput==null){
             $der=true;
+        }
+        $del=false;
+        if($d->estado==0 && $pro_i->oficina_input==$this->oficina && $pro_i->oficina_ouput==null){
+            $del=true;
         }
 
         try{
@@ -228,6 +234,7 @@ class DocumentoController extends Controller
                 'tiempo_creacion'=>$date,
                 'tiempo_final'=>$d->fecha_fin,
                 'accion'=>$der,
+                'editar'=>$del,
                 'proceso'=>Proceso::where('documento_id',$d->id)->get()->map(function($p) use(&$d){
                     $oficina_i=oficina::where('id',$p->oficina_input)->first();
                     $oficina_o=oficina::where('id',$p->oficina_ouput)->first();

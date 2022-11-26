@@ -3,7 +3,7 @@
         <v-card class="ma-3">
             <v-card-text>
                 <v-list-item-title class="text-h6">
-                    Datos del Documento {{dato.doc_tipo}} <v-btn  text outlined color="green" dark @click="abrirdialog()" > <v-icon>mdi-pencil</v-icon>Editar</v-btn>
+                    Datos del Documento {{dato.doc_tipo}} <v-btn v-if="dato.editar"  text outlined color="green" dark @click="abrirdialog()" > <v-icon>mdi-pencil</v-icon>Editar</v-btn>
                 </v-list-item-title>
                 <v-card elevation="0" class="mt-2">
                     <div id="dato">
@@ -25,14 +25,14 @@
                         </v-col>
                         <v-col cols="12" class="py-0" sm="6" md="3">
                              <v-list-item-subtitle>
-                                <div class="box-data"> <strong>Tipo de documento: </strong>  <div class="box-data-valor">{{dato.tipo}}</div></div> 
+                                <div class="box-data"> <strong>Documento: </strong>  <div class="box-data-valor">{{dato.tipo}}</div></div> 
                             </v-list-item-subtitle> 
                         </v-col>
-                        <v-col cols="12" class="py-0" sm="6" md="3">
+                        <!--v-col cols="12" class="py-0" sm="6" md="3">
                              <v-list-item-subtitle>
                                 <div class="box-data"> <strong>provehido: </strong>  <div class="box-data-valor">{{dato.provehido}}</div></div> 
                             </v-list-item-subtitle> 
-                        </v-col>
+                        </v-col-->
                         <v-col cols="12" class="py-0" sm="6" md="3">
                              <v-list-item-subtitle>
                                 <div class="box-data"> <strong>Prioridad: </strong>  <div class="box-data-valor">{{dato.prioridad}}</div></div> 
@@ -132,10 +132,12 @@
                     <v-col cols="12" sm="6"
                         md="6">
                         <v-select
-                        label="Tipo"
+                        label="Documento"
                         v-model="form.tipo"
                         :items="['RESOLUCION',
                                 'MEMORANDO MULTIPLE',
+                                'MEMORANDUM',
+                                'PROVEHIDO',
                                 'INFORME',
                                 'INFORME TECNICO',
                                 'INFORME LEGAL',
@@ -145,13 +147,13 @@
                                 'OFICIO MULTIPLE',]"
                         ></v-select>
                     </v-col>
-                    <v-col cols="12" sm="6"
+                    <!--v-col cols="12" sm="6"
                         md="6">
                         <v-text-field
                         label="provehido"
                         v-model="form.provehido"
                         ></v-text-field>
-                    </v-col>
+                    </v-col-->
                     <v-col
                         cols="12"
                         sm="4"

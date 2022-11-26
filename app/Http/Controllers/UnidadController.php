@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ImpresionExport;
 use App\Models\documento;
 use App\Models\numero;
 use App\Models\oficina;
@@ -12,6 +13,7 @@ use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Maatwebsite\Excel\Facades\Excel;
 
 class UnidadController extends Controller
 {
@@ -22,6 +24,9 @@ class UnidadController extends Controller
         $user=$request->user();
        // $role=role::findOrFail($user->rol_id);
         $this->oficina=$user->oficina_id;
+    }
+    public function imprimir(){
+        return Excel::download(new ImpresionExport($this->oficina), 'documento.xlsx');
     }
 
     public function fetch_docs($id){
@@ -66,6 +71,7 @@ class UnidadController extends Controller
                         'remitente'=>$d->remitente,
                         'dni'=>$d->dni,
                         'estado'=>$est,
+                        'tipo_doc'=>$d->tipo_doc,
                         'destino'=>$d->destino,
                         'tipo'=>$d->tipo,
                         'tiempo_final'=>$d->fecha_fin,

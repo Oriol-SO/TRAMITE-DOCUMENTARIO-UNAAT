@@ -7,6 +7,7 @@ import accionesdoc from '~/components/accionesdoc.vue';
 import sidevar from '~/components/sidevar.vue';
 import adddocumento from '~/components/agregardocumento.vue';
 import soporteproc from '~/components/soporteprocesos.vue';
+import imprimir from '~/components/imprimir.vue';
  
 // Components that are registered globaly.
 [
@@ -19,7 +20,8 @@ import soporteproc from '~/components/soporteprocesos.vue';
   accionesdoc,
   sidevar,
   adddocumento,
-  soporteproc
+  soporteproc,
+  imprimir
 ].forEach(Component => {
   Vue.component(Component.name, Component)
 })

@@ -3,6 +3,8 @@
 namespace App\Exports;
 
 use App\Models\documento;
+use App\Models\oficina;
+use App\Models\Proceso;
 use App\Models\seguimiento;
 use App\Models\tiempo;
 use Carbon\Carbon;
@@ -16,13 +18,17 @@ use PhpOffice\PhpSpreadsheet\Reader\Xml\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Style\Fill as StyleFill;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
-class DocumentoExport implements FromCollection,WithTitle,WithHeadings,WithStyles,ShouldAutoSize
+class ImpresionExport implements FromCollection,WithTitle,WithHeadings,WithStyles,ShouldAutoSize
 {
     /**
     * @return \Illuminate\Support\Collection
     */
     use Exportable;
 
+    public function __construct($unidad)
+    {
+        $this->unidad = $unidad;
+    }
 
     public function styles(Worksheet $sheet)
     {
@@ -40,9 +46,17 @@ class DocumentoExport implements FromCollection,WithTitle,WithHeadings,WithStyle
 
         $sheet->mergeCells('A2:J2');
         $sheet->mergeCells('A1:J1');
+        if($this->unidad==1){
+            $cell=documento::where('id','<>',null)->count();
+            $sheet->getStyle('A1:J'.$cell+3)->ApplyFromArray($borderDashed);
+        }else{
+            $docs_entrantes=Proceso::where('oficina_ouput',$this->unidad)->orWhere('oficina_input',$this->unidad )->get('documento_id');
+            $cell=documento::whereIn('id',$docs_entrantes)->orderBy('prioridad', 'asc')->count();
+            $sheet->getStyle('A1:J'.$cell+3)->ApplyFromArray($borderDashed);
+        }
        // $sheet->getStyle('A1')->setValignment('center');
-       $cell=documento::where('id','<>',null)->count();
-       $sheet->getStyle('A1:J'.$cell+3)->ApplyFromArray($borderDashed);
+      // $cell=documento::where('estado',)->count();
+      
 
     
     }
@@ -53,8 +67,9 @@ class DocumentoExport implements FromCollection,WithTitle,WithHeadings,WithStyle
 
     public function headings(): array
     {
+        $ofi=oficina::where('id',$this->unidad)->first();
         return [
-            ['LISTA DE DOCUMENTOS REGISTRADOS'],
+            ['LISTA DE DOCUMENTOS TRATADOS EN '.($ofi?strtoupper($ofi->nombre):'')],
             ['FECHA DE REPORTE: '.Carbon::now()],
             [
                 'N°',
@@ -89,7 +104,13 @@ class DocumentoExport implements FromCollection,WithTitle,WithHeadings,WithStyle
     public function collection()
     {
         $num=1;
-        $seguis= documento::where('id','<>',null)->get()->map(function($d) use(&$num){
+        $docs_entrantes=[1];
+        if($this->unidad==1){
+            $docs_entrantes=documento::where('id','<>',null)->get('id');
+        }else{
+            $docs_entrantes=Proceso::where('oficina_ouput',$this->unidad )->orWhere('oficina_input',$this->unidad )->get('documento_id');
+        }
+        $seguis=documento::whereIn('id',$docs_entrantes)->orderBy('prioridad', 'asc')->get()->map(function($d) use(&$num){
            // $duracion=(Carbon::parse($d->fecha)->diffInDays(Carbon::parse($d->fecha_fin)));
             return[
                 'N°'=>$num++,
