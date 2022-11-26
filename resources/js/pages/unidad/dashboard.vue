@@ -173,7 +173,7 @@ export default {
         search: '',
         headers: [
           { text: 'Codigo',align: 'start', value: 'id' },
-          { text: 'Documento',align: 'start', value: 'documento' },
+          { text: 'Asunto',align: 'start', value: 'documento' },
           { text: 'Fecha', value: 'fecha' },
           { text: 'Interesado', value: 'remitente' },
           { text: 'DNI', value: 'dni' },

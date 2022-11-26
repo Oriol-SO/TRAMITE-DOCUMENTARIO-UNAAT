@@ -180,7 +180,14 @@ class AdminController extends Controller
     public function documentos_rep(){
         return documento::all()->map(function($d){
             $ofi=oficina::where('id',$d->oficina_id)->first();
-            
+            $est=3;
+            if($d->resuelto==1){
+                $est=2; 
+            }
+            if($d->estado==1){
+                $est=1;
+            }
+            $count=1;
             return[
                 'id'=>$d->id,
                 'documento'=>$d->documento,
@@ -191,22 +198,40 @@ class AdminController extends Controller
                 'destino'=>$d->destino,
                 'path'=>$d->path,
                 'tipo'=>$d->tipo,
+                'tipo_doc'=>$d->tipo_doc,
+                'numero'=>$d->numero_doc,
                 'tiempo_final'=>$d->fecha_fin,
-                'estado'=>$d->estado,
+                'estado'=>$est,
+                'estado_fin'=>$d->estado,
                 'prioridad'=>$d->prioridad,
                 'nombre_prioridad'=>$this->prioridad($d->prioridad),
                 'oficina_id'=>1,
                 'oficina'=>$ofi?$ofi->nombre:null,
                 'duracion'=>Carbon::parse($d->fecha)->diffInDays(Carbon::parse($d->fecha_fin)).' días',
-                'proceso'=>Proceso::where('documento_id',$d->id)->get()->map(function($p){
+                'proceso'=>Proceso::where('documento_id',$d->id)->get()->map(function($p) use(&$count){
                     $ofi=oficina::where('id',$p->oficina_input)->first();
                     $ofo=oficina::where('id',$p->oficina_ouput)->first();
+                    //$procs=Proceso::where('id',$p->documento_id)->count();
+                    $num=$count++;
+                    $del=false;
+                    if( $p->derivar!=null && $p->recibido!=1 && $p->estado_der==1 ){
+                        $del=true;
+                    }
                     return[
+                        'num'=>$count++,
+                        'documento_id'=>$p->documento_id,
                         'id'=>$p->id,
-                        'oficina_input_nom'=>$ofi?$ofi->nombre:null,
-                        'oficina_ouput_nom'=>$ofo?$ofo->nombre:null,
+                        'nom_input'=>$ofi?$ofi->nombre:null,
+                        'nom_ouput'=>$ofo?$ofo->nombre:null,
                         'recepcion'=>$p->recepcion,
-                        'derivacion'=>$p->derivar,
+                        'derivar'=>$p->derivar,
+                        'prohevido'=>$p->prohevido,
+                        'asunto'=>$p->asunto,
+                        'tipo'=>$p->tipo,
+                        'numero'=>$p->numero,
+                        'eliminar'=>$del,
+                        'estado_rep'=>$p->recibido,
+                        'estado_der'=>$p->estado_der,
                     ];
                 }),
             ];
@@ -357,7 +382,11 @@ class AdminController extends Controller
             //eliminamos la derivacion
             $proceso->oficina_ouput=null;
             $proceso->derivar=null;
-            
+            $proceso->estado_der=0;
+            $proceso->tipo=null;
+            $proceso->numero=null;
+            $proceso->prohevido=null;
+            $proceso->save();
             return 'eliminado';
 
         }catch(Exception $e){

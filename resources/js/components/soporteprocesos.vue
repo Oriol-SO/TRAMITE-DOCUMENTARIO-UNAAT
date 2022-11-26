@@ -17,15 +17,27 @@
                             <v-col cols="4">{{proc.derivar}}</v-col>
                              <v-col cols="4"><v-chip small color="green accent-3">{{proc.nom_ouput}}</v-chip></v-col>
                         </v-row>
-                        <v-row v-if="proc.prohevido">
-                            <v-col cols="12" class="py-0">
+                        <v-row v-if="proc.derivar"  >
+                            <v-col cols="12" sm="3" class="py-0">
+                                <strong style="color:blue;">Numero:</strong> <br>
+                                <span>{{proc.numero}}</span>
+                            </v-col>
+                            <v-col cols="12" sm="3" class="py-0">
+                                <strong style="color:blue;">Asunto:</strong> <br>
+                                <span>{{proc.asunto}}</span>
+                            </v-col>
+                            <v-col cols="12" sm="3" class="py-0">
+                                <strong style="color:blue;">Tipo:</strong> <br>
+                                <span>{{proc.tipo}}</span>
+                            </v-col>
+                            <v-col v-if="proc.prohevido" cols="12" sm="3" class="py-0">
                                 <strong style="color:blue;">Provehido:</strong> <br>
                                 <span>{{proc.prohevido}}</span>
                             </v-col>
                         </v-row>
                         <v-row>
                             <v-col cols="12" class="py-0">
-                            <small v-if="dato.estado || dato.estado_res"><v-chip class="ml-auto" small color="green" dark>Finalizado</v-chip></small>
+                            <small v-if="dato.estado_fin || dato.estado_res"><v-chip class="ml-auto" small color="green" dark>Finalizado</v-chip></small>
                             <small v-else-if="proc.estado_rep"><v-chip class="ml-auto" small color="primary" dark>Recepcionado</v-chip></small>
                             <small v-else-if="proc.estado_der"><v-chip class="ml-auto" small color="purple" dark>derivado</v-chip></small>
                             <small v-else><v-chip class="ml-auto" small color="grey" dark>Creado</v-chip></small>
@@ -34,10 +46,9 @@
                         
                     </div>
                     <v-card-actions>     
-                       <v-btn v-if="proc.eliminar" class="ml-auto" small color="error" @click="del_proc(proc)">Eliminar</v-btn>      
+                       <v-btn v-if="proc.eliminar" class="ml-auto" small color="error" @click="del_proc(proc)">Eliminar derivacion</v-btn>      
                     </v-card-actions>
                 </v-card>
-              {{oficinas_fetch}}
             </v-card-text>
         </v-card>
     </div>
@@ -64,10 +75,13 @@ export default {
     },
     methods:{
         del_proc(proc){
+            if(!confirm('¿Estas seguro de realizar esta acción?')){
+                return
+            }
             this.form.proceso=proc.id;
             this.form.documento=proc.documento_id;
             this.form.post('/api/eliminar-derivacion').then(response=>{
-
+                this.$emit('refresh',true);
             })
         },  
     }

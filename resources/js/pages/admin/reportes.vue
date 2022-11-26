@@ -69,6 +69,17 @@
                 @click="ver(item)"  
                 >Ver</v-btn>
             </template>
+            <template v-slot:[`item.editar`]="{ item }">
+                <v-btn
+                small
+                rounded
+                color="primary"
+                elevation="0"
+                style="color:#fff;"
+                class="text-capitalize"
+                @click="ver_proc(item)"  
+                >Editar</v-btn>
+            </template>
             
             </v-data-table>
         </v-card>
@@ -84,22 +95,25 @@
                 <v-card-text>
                     <v-card>
                         <v-row class="ma-2">
-                            <v-col cols="12" class="py-0 my-0" >
+                            <v-col cols="12" sm="4" class="py-0 my-0" >
                                 <strong>Asunto:</strong> <br>{{doc.documento}}
                             </v-col>
-                             <v-col cols="12" sm="8" class="py-0 my-0">
+                            <v-col cols="12" sm="4" class="py-0 my-0" >
+                                <strong>TIpo documento:</strong> <br>{{doc.tipo_doc}}
+                            </v-col>
+                             <v-col v-if="doc.remitente" cols="12" sm="4" class="py-0 my-0">
                                 <strong>Interesado:</strong> <br>{{doc.remitente}}
                             </v-col>
-                             <v-col cols="12" sm="4" class="py-0 my-0">
+                             <v-col v-if="doc.dni" cols="12" sm="4" class="py-0 my-0">
                                 <strong>DNI :</strong> <br>{{doc.dni}}
                             </v-col>
-                             <v-col cols="12" sm="4" class="py-0 my-0">
+                             <!--v-col cols="12" sm="4" class="py-0 my-0">
                                 <strong>Destino:</strong> <br>{{doc.destino}}
-                            </v-col>
+                            </v-col-->
                             <v-col cols="12"  sm="4" class="py-0 my-0">
                                 <strong>Inicio:</strong> <br>{{doc.fecha}}
                             </v-col>
-                            <v-col cols="12"  sm="4" class="py-0 my-0">
+                            <v-col v-if="doc.fecha_fin" cols="12"  sm="4" class="py-0 my-0">
                                 <strong>Fin:</strong> <br>{{doc.fecha_fin}}
                             </v-col>
                              <v-col cols="12" sm="4" class="py-0 my-0">
@@ -110,6 +124,12 @@
                             </v-col>
                             <v-col cols="12" sm="4" class="py-0 my-0">
                                 <strong>Oficina actual:</strong> <br>{{doc.oficina}}
+                            </v-col>
+                            <v-col cols="12" sm="4" class="py-0 my-0">
+                                <strong >Estado:</strong> <br> 
+                                <strong style="color:green" v-if="doc.estado==1">Archivado</strong>
+                                <strong style="color:orange" v-else-if="doc.estado==2">Atendido</strong>
+                                <strong style="color:red" v-else>Pendiente</strong>
                             </v-col>
 
                         </v-row>
@@ -145,10 +165,10 @@
             <v-card-text>
                 <v-card class="my-2" v-for="(proc,i) in doc.proceso" :key="i" elevation="2">
                     <div class="mt-2">
-                            <strong class="ma-1" >{{proc.oficina_input_nom}}</strong>
+                            <strong class="ma-1" >{{proc.nom_input}}</strong>
                             <div class="ma-2 pa-2" >
                             <span>Fecha de recepción:</span> <v-chip small color="warning">{{proc.recepcion}}</v-chip> <br> <br>
-                            <span v-if="proc.derivacion" >Fecha de derivación:</span> <v-chip v-if="proc.derivacion" small color="green accent-3">{{proc.derivacion}}</v-chip>
+                            <span v-if="proc.derivar" >Fecha de derivación:</span> <v-chip v-if="proc.derivar" small color="green accent-3">{{proc.derivar}}</v-chip>
                             <div v-else-if="doc.fecha_fin">
                                 <strong >Archivado el </strong><v-chip small color="primary">{{doc.fecha_fin}}</v-chip>
                             </div>
@@ -179,6 +199,40 @@
             </v-card-actions>
         </v-card>
         </v-dialog>
+        
+        <v-dialog
+        v-model="dialog_proc"
+        fullscreen
+        hide-overlay
+        transition="dialog-bottom-transition"
+        > 
+                <v-card>
+                    <v-toolbar
+                    dark
+                    color="primary"
+                    >
+                    <v-toolbar-title>PROCESOS DEL DOCUMENTO</v-toolbar-title>
+                    <v-spacer></v-spacer>
+                    <v-toolbar-items>
+                        <v-btn
+                        dark
+                        text
+                        rounded
+                        @click="dialog_proc = false"
+                        >
+                        Cerrar
+                        </v-btn>
+                    </v-toolbar-items>
+                    </v-toolbar>
+                  
+                    <v-subheader>Información del documento </v-subheader>
+                    <v-card>
+                        <datosdoc :dato="doc"/>
+                        <soporteproc :dato="doc" @refresh="refrescar"/>
+                    </v-card>
+                </v-card>
+        </v-dialog>
+
     </v-card>
 </div>
 </template>
@@ -195,27 +249,36 @@ export default {
         doc:[],
         headers: [
           { text: 'Codigo',align: 'start', value: 'id' },
-          { text: 'Documento',align: 'start', value: 'documento' },
+          { text: 'Asunto',align: 'start', value: 'documento' },
           { text: 'Fecha', value: 'fecha' },
-          { text: 'Responsable', value: 'remitente' },
+          { text: 'Interesado', value: 'remitente' },
           { text: 'DNI', value: 'dni' },
-          { text: 'Destino', value: 'destino' },
+          { text: 'Numero doc', value: 'numero' },
           { text: 'Tipo', value: 'tipo' },
-           { text: 'Fecha final', value: 'fecha_fin' },
-          { text: '', value: 'action' },
-         
+          { text: 'Fecha final', value: 'fecha_fin' },
+          { text: 'Tipo documento', value: 'tipo_doc' },
+          {text:'prioridad', value:'nombre_prioridad'},
+          { text: '', value: 'action' },      
+          { text: '', value: 'editar' },     
         ],
         dialog_proc:false,
         formfecha:new Form({
             fecha1:'',
             fecha2:'',
             tipo:'',
-        })
+        }),
+        dialog_proc:false,
         
     }
    },mounted(){
     this.fecth_docs();
    },methods:{
+        refrescar(result){
+            if(result){
+                this.fecth_docs();
+                this.dialog_proc=false;
+            }
+        },
         fecth_docs(){
             axios.get('/api/get-documentos-rep').then(response=>{
                 this.documentos=response.data;
@@ -224,6 +287,7 @@ export default {
         ver(item){
             this.doc=item;
             this.dialog=true
+            
         },
         procesos(){
             this.dialog_proc=true;
@@ -330,7 +394,10 @@ export default {
                 console.log('error');
             })
         }
-        
+        ,ver_proc(item){
+            this.dialog_proc=true;
+            this.doc=item;
+        }
 
    }
 }
