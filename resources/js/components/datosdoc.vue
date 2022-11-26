@@ -136,7 +136,7 @@
                         v-model="form.tipo"
                         :items="['RESOLUCION',
                                 'MEMORANDO MULTIPLE',
-                                'MEMORANDUM',
+                                'MEMORANDO',
                                 'PROVEHIDO',
                                 'INFORME',
                                 'INFORME TECNICO',

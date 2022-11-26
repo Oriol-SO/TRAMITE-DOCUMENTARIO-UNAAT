@@ -66,6 +66,8 @@
                          label="Tipo doc"
                          :items="['RESOLUCION',
                                 'MEMORANDO MULTIPLE',
+                                'MEMORANDO',
+                                'PROVEHIDO',
                                 'INFORME',
                                 'INFORME TECNICO',
                                 'INFORME LEGAL',
