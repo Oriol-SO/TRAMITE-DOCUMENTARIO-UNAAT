@@ -80,6 +80,7 @@ class ImpresionExport implements FromCollection,WithTitle,WithHeadings,WithStyle
                 'ASUNTO',
                 'DOCUMENTO TIPO',
                 'INTERESADO',
+                'UNIDAD',
                 'PRIORIDAD',
                 'FECHA DE CULMINACION',
                // 'DURACION DIAS',
@@ -112,6 +113,8 @@ class ImpresionExport implements FromCollection,WithTitle,WithHeadings,WithStyle
         }
         $seguis=documento::whereIn('id',$docs_entrantes)->orderBy('prioridad', 'asc')->get()->map(function($d) use(&$num){
            // $duracion=(Carbon::parse($d->fecha)->diffInDays(Carbon::parse($d->fecha_fin)));
+           $pro=Proceso::where('documento_id',$d->id)->orderBy('id','asc')->first();
+           $ofi=oficina::where('id',$pro?$pro->oficina_input:'1')->first();
             return[
                 'N°'=>$num++,
                 'CODIGO'=>$d->id,
@@ -121,6 +124,7 @@ class ImpresionExport implements FromCollection,WithTitle,WithHeadings,WithStyle
                 'ASUNTO'=>$d->documento,
                 'DOCUMENTO TIPO'=>$d->tipo_doc,
                 'INTERESADO'=>$d->remitente,
+                'UNIDAD'=>$ofi?$ofi->nombre:'',
                 'PRIORIDAD'=>$this->prioridad($d->prioridad),
                 'FECHA DE CULMINACION'=>$d->fecha_fin,
                 //'DURACION DIAS'=>$duracion?$duracion:'0',

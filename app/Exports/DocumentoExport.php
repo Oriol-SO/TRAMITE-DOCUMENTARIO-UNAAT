@@ -3,6 +3,8 @@
 namespace App\Exports;
 
 use App\Models\documento;
+use App\Models\oficina;
+use App\Models\Proceso;
 use App\Models\seguimiento;
 use App\Models\tiempo;
 use Carbon\Carbon;
@@ -65,6 +67,7 @@ class DocumentoExport implements FromCollection,WithTitle,WithHeadings,WithStyle
                 'ASUNTO',
                 'DOCUMENTO TIPO',
                 'INTERESADO',
+                'UNIDAD',
                 'PRIORIDAD',
                 'FECHA DE CULMINACION',
                // 'DURACION DIAS',
@@ -91,6 +94,8 @@ class DocumentoExport implements FromCollection,WithTitle,WithHeadings,WithStyle
         $num=1;
         $seguis= documento::where('id','<>',null)->get()->map(function($d) use(&$num){
            // $duracion=(Carbon::parse($d->fecha)->diffInDays(Carbon::parse($d->fecha_fin)));
+           $pro=Proceso::where('documento_id',$d->id)->orderBy('id','asc')->first();
+           $ofi=oficina::where('id',$pro?$pro->oficina_input:'1')->first();
             return[
                 'N°'=>$num++,
                 'CODIGO'=>$d->id,
@@ -100,6 +105,7 @@ class DocumentoExport implements FromCollection,WithTitle,WithHeadings,WithStyle
                 'ASUNTO'=>$d->documento,
                 'DOCUMENTO TIPO'=>$d->tipo_doc,
                 'INTERESADO'=>$d->remitente,
+                'UNIDAD'=>$ofi?$ofi->nombre:'',
                 'PRIORIDAD'=>$this->prioridad($d->prioridad),      
                 'FECHA DE CULMINACION'=>$d->fecha_fin,
                 //'DURACION DIAS'=>$duracion?$duracion:'0',
