@@ -29,7 +29,7 @@ class UserSeeder extends Seeder
             [
             'id' => 2,
             'name' => 'Mesa de partes',
-            'email' => 'meza@gmail.com',
+            'email' => 'mesa@gmail.com',
             'dni'=>'98765432',
             'email_verified_at' => now(),
             'rol_id'=>2,
