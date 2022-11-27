@@ -1,77 +1,87 @@
 <template>
-  <v-container fluid class="fill-height main">
-    <v-flex>
-      <v-card
-        class="mx-auto my-auto h-100 transparente py-6"
-        rounded="lg"
-        elevation="2"
-        width="380"
-      >
-      <div class="d-flex" >
-        <v-img
-        class="mx-auto"
-        max-height="100"
-        max-width="200"
-        src="/img/logo.jpeg"
-      ></v-img>
-      </div>
-
-        <v-card-title class="d-block text-center"
-          >Iniciar sesión</v-card-title
+<v-container class="main px-0 py-0 my-0"  fluid grid-list-md>
+  <v-img
+    style=" height: 100vh ; magin:0"       
+    :src="url"
+    class="white--text"
+    gradient="to bottom, rgba(0, 57, 169, .9), rgba(0,0,0,.2)"
+  >
+    <v-container fluid class="fill-height main">
+      <v-flex>
+        <v-card
+          class="mx-auto my-auto h-100  py-6"
+          rounded="lg"
+          elevation="2"
+          width="380"
+          color="#f7f7f7"
         >
-        <v-card-text>
-          <v-form
-            ref="form"
-            @submit.prevent="login"
-            @keydown="form.onKeydown($event)"
+        <div class="d-flex" >
+          <v-img
+          class="mx-auto"
+          max-height="100"
+          max-width="200"
+          src="/img/logo.jpeg"
+        ></v-img>
+        </div>
+
+          <v-card-title class="d-block text-center"
+            > {{ appName }}<br />Iniciar sesión</v-card-title
           >
-            <v-text-field
-              dense
-              v-model="form.email"
-              label="Usuario"
-              type="text"
-              outlined
-              prepend-inner-icon="mdi-account-outline"
-              required
-              autofocus
-              :error="form.errors.has('email')"
-            ></v-text-field>
-
-            <v-text-field
-              dense
-              v-model="form.password"
-              label="Contraseña"
-              outlined
-              prepend-inner-icon="mdi-lock-outline"
-              required
-              :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
-              :type="show1 ? 'text' : 'password'"
-              :error="form.errors.has('password')"
-              @click:append="show1 = !show1"
-            ></v-text-field>
-
-            <v-flex class="d-flex align-center justify-space-between flex-wrap">
-              <v-checkbox v-model="remember" label="Recordarme"></v-checkbox>
-              <router-link :to="{ name: 'password.request' }"
-                >¿Has olvidado tu contraseña?</router-link
-              >
-            </v-flex>
-
-            <v-btn
-              :loading="form.busy"
-              color="primary"
-              class="mr-4"
-              type="submit"
-              dark
-              block
+          <v-card-text>
+            <v-form
+              ref="form"
+              @submit.prevent="login"
+              @keydown="form.onKeydown($event)"
             >
-              Ingresar
-            </v-btn>
-          </v-form>
-        </v-card-text>
-      </v-card>
-    </v-flex>
-  </v-container>
+              <v-text-field
+                dense
+                v-model="form.email"
+                label="Correo institucional"
+                type="text"
+                outlined
+                prepend-inner-icon="mdi-account-outline"
+                required
+                autofocus
+                :error="form.errors.has('email')"
+              ></v-text-field>
+
+              <v-text-field
+                dense
+                v-model="form.password"
+                label="Contraseña"
+                outlined
+                prepend-inner-icon="mdi-lock-outline"
+                required
+                :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+                :type="show1 ? 'text' : 'password'"
+                :error="form.errors.has('password')"
+                @click:append="show1 = !show1"
+              ></v-text-field>
+
+              <v-flex class="d-flex align-center justify-space-between flex-wrap">
+                <v-checkbox v-model="remember" label="Recordarme"></v-checkbox>
+                <!--router-link :to="{ name: 'password.request' }"
+                  >¿Has olvidado tu contraseña?</router-link
+                -->
+              </v-flex>
+
+              <v-btn
+                :loading="form.busy"
+                color="primary"
+                class="mr-4"
+                type="submit"
+                dark
+                block
+              >
+                Ingresar
+              </v-btn>
+            </v-form>
+          </v-card-text>
+        </v-card>
+      </v-flex>
+    </v-container>
+  </v-img>
+</v-container>
 </template>
 
 <script>
@@ -100,6 +110,7 @@ export default {
     }),
     remember: false,
     show1: false,
+    url:'/img/fondo-unaat.jpg'
   }),
 
   methods: {
@@ -142,9 +153,7 @@ export default {
 };
 </script>
 <style scoped>
-.main {
-  background-color: rgb(223, 226, 230);
-}
+
 
 .img {
   height: 7.5rem;
