@@ -36,15 +36,15 @@ class DocumentoExport implements FromCollection,WithTitle,WithHeadings,WithStyle
                 ],
             ],
         ];
-        $sheet->getStyle('A3:J3')->getFill()
+        $sheet->getStyle('A3:K3')->getFill()
         ->setFillType(StyleFill::FILL_SOLID)
         ->getStartColor()->setARGB('ACB9CA');
 
-        $sheet->mergeCells('A2:J2');
-        $sheet->mergeCells('A1:J1');
+        $sheet->mergeCells('A2:K2');
+        $sheet->mergeCells('A1:K1');
        // $sheet->getStyle('A1')->setValignment('center');
        $cell=documento::where('id','<>',null)->count();
-       $sheet->getStyle('A1:J'.$cell+3)->ApplyFromArray($borderDashed);
+       $sheet->getStyle('A1:K'.$cell+3)->ApplyFromArray($borderDashed);
 
     
     }
