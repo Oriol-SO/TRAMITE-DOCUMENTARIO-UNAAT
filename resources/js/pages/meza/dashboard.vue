@@ -35,7 +35,7 @@
                 outlined
                 style="color:#fff;"
                 class="text-capitalize"
-                @click=" $router.push({ path: `/meza-de-partes/documento/${item.id}`, }) ,finalizar_tiempo_busqueda(item.id) "  
+                @click=" $router.push({ path: `/mesa-de-partes/documento/${item.id}`, }) ,finalizar_tiempo_busqueda(item.id) "  
                 >Seguimiento</v-btn>
                  <v-btn
                 small
@@ -45,7 +45,7 @@
                 elevation="0"
                 style="color:#fff;"
                 class="text-capitalize"
-                @click=" $router.push({ path: `/meza-de-partes/documento/${item.id}`, }) ,finalizar_tiempo_busqueda(item.id) "  
+                @click=" $router.push({ path: `/mesa-de-partes/documento/${item.id}`, }) ,finalizar_tiempo_busqueda(item.id) "  
                 >Seguimiento</v-btn>
             </template>
             <template v-slot:[`item.prioridad`]="{ item }">

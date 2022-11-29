@@ -36,7 +36,7 @@ export default [
     ]
   },
   {
-    path: '/meza-de-partes',
+    path: '/mesa-de-partes',
     component: page('meza/index.vue'),
     children: [
       { path: '', redirect: { name: 'dash.meza' } },
