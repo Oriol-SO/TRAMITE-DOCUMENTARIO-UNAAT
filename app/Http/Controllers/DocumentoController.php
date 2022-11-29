@@ -29,7 +29,8 @@ class DocumentoController extends Controller
 
     public function documentos(){
         $num=1;
-        return documento::where('id','<>',null)->orderBy('prioridad', 'asc')->get()->map(function($d)use(&$num){
+        $docs_entrantes=Proceso::where('oficina_ouput',1)->orWhere('oficina_input',1)->get('documento_id');
+        return documento::whereIn('id',$docs_entrantes)->orderBy('prioridad', 'asc')->get()->map(function($d)use(&$num){
             $proceso=Proceso::where('documento_id',$d->id)->orderBy('id', 'desc')->first();
                 $der=false;
                 $rep=false;

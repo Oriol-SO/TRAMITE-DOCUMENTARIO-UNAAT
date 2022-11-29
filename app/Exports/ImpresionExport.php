@@ -40,20 +40,17 @@ class ImpresionExport implements FromCollection,WithTitle,WithHeadings,WithStyle
                 ],
             ],
         ];
-        $sheet->getStyle('A3:K3')->getFill()
+        $sheet->getStyle('A3:L3')->getFill()
         ->setFillType(StyleFill::FILL_SOLID)
         ->getStartColor()->setARGB('ACB9CA');
 
-        $sheet->mergeCells('A2:K2');
-        $sheet->mergeCells('A1:K1');
-        if($this->unidad==1){
-            $cell=documento::where('id','<>',null)->count();
-            $sheet->getStyle('A1:K'.$cell+3)->ApplyFromArray($borderDashed);
-        }else{
-            $docs_entrantes=Proceso::where('oficina_ouput',$this->unidad)->orWhere('oficina_input',$this->unidad )->get('documento_id');
-            $cell=documento::whereIn('id',$docs_entrantes)->orderBy('prioridad', 'asc')->count();
-            $sheet->getStyle('A1:K'.$cell+3)->ApplyFromArray($borderDashed);
-        }
+        $sheet->mergeCells('A2:L2');
+        $sheet->mergeCells('A1:L1');
+
+        $docs_entrantes=Proceso::where('oficina_ouput',$this->unidad)->orWhere('oficina_input',$this->unidad )->get('documento_id');
+        $cell=documento::whereIn('id',$docs_entrantes)->orderBy('prioridad', 'asc')->count();
+        $sheet->getStyle('A1:L'.$cell+3)->ApplyFromArray($borderDashed);
+        
        // $sheet->getStyle('A1')->setValignment('center');
       // $cell=documento::where('estado',)->count();
       
@@ -82,6 +79,7 @@ class ImpresionExport implements FromCollection,WithTitle,WithHeadings,WithStyle
                 'INTERESADO',
                 'UNIDAD',
                 'PRIORIDAD',
+                'UNIDAD DERIVADA',
                 'FECHA DE CULMINACION',
                // 'DURACION DIAS',
             ]
@@ -105,16 +103,14 @@ class ImpresionExport implements FromCollection,WithTitle,WithHeadings,WithStyle
     public function collection()
     {
         $num=1;
-        $docs_entrantes=[1];
-        if($this->unidad==1){
-            $docs_entrantes=documento::where('id','<>',null)->get('id');
-        }else{
-            $docs_entrantes=Proceso::where('oficina_ouput',$this->unidad )->orWhere('oficina_input',$this->unidad )->get('documento_id');
-        }
+        $docs_entrantes=[0];
+        $docs_entrantes=Proceso::where('oficina_ouput',$this->unidad )->orWhere('oficina_input',$this->unidad )->get('documento_id');
         $seguis=documento::whereIn('id',$docs_entrantes)->orderBy('prioridad', 'asc')->get()->map(function($d) use(&$num){
            // $duracion=(Carbon::parse($d->fecha)->diffInDays(Carbon::parse($d->fecha_fin)));
            $pro=Proceso::where('documento_id',$d->id)->orderBy('id','asc')->first();
-           $ofi=oficina::where('id',$pro?$pro->oficina_input:'1')->first();
+           $ofi=oficina::where('id',$pro?$pro->oficina_input:'0')->first();
+           $proc_ou=Proceso::where('documento_id',$d->id)->where('oficina_input',$this->unidad)->orderBy('id','asc')->first();
+           $ofi_oup=oficina::where('id',$proc_ou?$proc_ou->oficina_ouput:'0')->first();
             return[
                 'N°'=>$num++,
                 'CODIGO'=>$d->id,
@@ -126,6 +122,7 @@ class ImpresionExport implements FromCollection,WithTitle,WithHeadings,WithStyle
                 'INTERESADO'=>$d->remitente,
                 'UNIDAD'=>$ofi?$ofi->nombre:'',
                 'PRIORIDAD'=>$this->prioridad($d->prioridad),
+                'UNIDAD DERIVADA'=>$ofi_oup?$ofi_oup->nombre:'',
                 'FECHA DE CULMINACION'=>$d->fecha_fin,
                 //'DURACION DIAS'=>$duracion?$duracion:'0',
             ];
