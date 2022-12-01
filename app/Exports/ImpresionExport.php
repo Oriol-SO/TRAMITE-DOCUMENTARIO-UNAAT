@@ -40,16 +40,16 @@ class ImpresionExport implements FromCollection,WithTitle,WithHeadings,WithStyle
                 ],
             ],
         ];
-        $sheet->getStyle('A3:M3')->getFill()
+        $sheet->getStyle('A3:L3')->getFill()
         ->setFillType(StyleFill::FILL_SOLID)
         ->getStartColor()->setARGB('ACB9CA');
 
-        $sheet->mergeCells('A2:M2');
-        $sheet->mergeCells('A1:M1');
+        $sheet->mergeCells('A2:L2');
+        $sheet->mergeCells('A1:L1');
 
         $docs_entrantes=Proceso::where('oficina_ouput',$this->unidad)->orWhere('oficina_input',$this->unidad )->get('documento_id');
         $cell=documento::whereIn('id',$docs_entrantes)->orderBy('prioridad', 'asc')->count();
-        $sheet->getStyle('A1:M'.$cell+3)->ApplyFromArray($borderDashed);
+        $sheet->getStyle('A1:L'.$cell+3)->ApplyFromArray($borderDashed);
         
        // $sheet->getStyle('A1')->setValignment('center');
       // $cell=documento::where('estado',)->count();
