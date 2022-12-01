@@ -32,6 +32,13 @@ class DocumentoController extends Controller
         $docs_entrantes=Proceso::where('oficina_ouput',1)->orWhere('oficina_input',1)->get('documento_id');
         return documento::whereIn('id',$docs_entrantes)->orderBy('prioridad', 'asc')->get()->map(function($d)use(&$num){
             $proceso=Proceso::where('documento_id',$d->id)->orderBy('id', 'desc')->first();
+            $proc_ini=Proceso::where('documento_id',$d->id)->orderBy('id','asc')->first();
+            $propio=false;
+            if($proc_ini){
+                if($proc_ini->oficina_input==1){
+                    $propio=true;
+                }
+            }
                 $der=false;
                 $rep=false;
                 $archi=false;
@@ -76,6 +83,7 @@ class DocumentoController extends Controller
                 'archivado'=>1,
                 'numero_doc'=>$d->numero_doc,
                 'num_corre'=>$d->num_corre,
+                'propio'=>$propio,
                // 'derivar'=>$der,     
             ];
         });

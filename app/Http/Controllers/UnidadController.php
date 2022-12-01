@@ -36,6 +36,13 @@ class UnidadController extends Controller
 
             $documentos=documento::whereIn('id',$docs_entrantes)->orderBy('prioridad', 'asc')->get()->map(function($d){
                     $proceso=Proceso::where('documento_id',$d->id)->orderBy('id', 'desc')->first();
+                    $proc_ini=Proceso::where('documento_id',$d->id)->orderBy('id','asc')->first();
+                    $propio=false;
+                    if($proc_ini){
+                        if($proc_ini->oficina_input==$this->oficina){
+                            $propio=true;
+                        }
+                    }
                     $der=false;
                     $rep=false;
                     $archi=false;
@@ -78,6 +85,7 @@ class UnidadController extends Controller
                         'atendido'=>$antendido,    
                         'numero_doc'=>$d->numero_doc,
                         'num_corre'=>$d->num_corre,
+                        'propio'=>$propio,
                         
                     ];
             });

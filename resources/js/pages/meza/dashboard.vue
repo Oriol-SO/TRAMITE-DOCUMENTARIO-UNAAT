@@ -72,6 +72,19 @@
                 </v-chip>
 
             </template>
+            <template v-slot:[`item.propio`]="{ item }">
+                <v-avatar 
+                size="20"
+                
+                v-bind:color="item.propio?'green accent-3':'error'"
+                >
+                  <v-icon darkc  >
+                    mdi-check-circle
+                  </v-icon>  
+                </v-avatar>
+
+            </template>
+
             
             </v-data-table>
             <div class="ma-2 pb-2">
@@ -94,6 +107,7 @@ export default {
         hola:'Bienvenido a Mesa de partes',
         search: '',
         headers: [
+          {text:'',value:'propio'},
           { text: 'Codigo',align: 'start', value: 'id' },
           { text: 'Fecha', value: 'fecha' },
           { text: 'Documento', value: 'tipo' },

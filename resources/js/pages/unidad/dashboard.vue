@@ -71,6 +71,19 @@
                 <v-chip v-else-if="item.estado==3" small>
                     Pendiente
                 </v-chip>
+                
+
+            </template>
+            <template v-slot:[`item.propio`]="{ item }">
+                <v-avatar 
+                size="20"
+                
+                v-bind:color="item.propio?'green accent-3':'error'"
+                >
+                  <v-icon darkc  >
+                    mdi-check-circle
+                  </v-icon>  
+                </v-avatar>
 
             </template>
 
@@ -175,6 +188,7 @@ export default {
         hola:'',
         search: '',
         headers: [
+          {text:'',value:'propio'},
           { text: 'Codigo',align: 'start', value: 'id' },
           { text: 'Fecha', value: 'fecha' },
           { text: 'Documento', value: 'tipo' },
