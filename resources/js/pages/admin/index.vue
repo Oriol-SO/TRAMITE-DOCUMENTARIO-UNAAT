@@ -18,7 +18,7 @@ export default {
   data(){
     return{
       links: [
-      { title: "Inicio", icon: "mdi-view-dashboard", to: "dash.admin" },
+      { title: "Usuarios", icon: "mdi-view-dashboard", to: "dash.admin" },
       { title: "Reportes", icon: "mdi-file-document",to: "admin.repo"},
       /*{ title: "Personas/Usuarios", icon: "mdi-account-multiple",to: "admin.roles"},*/
       { title: "Organos-Unidades", icon: "mdi-folder", to: "admin.oficinas" },
