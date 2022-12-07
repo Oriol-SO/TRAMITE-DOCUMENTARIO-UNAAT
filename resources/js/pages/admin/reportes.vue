@@ -70,15 +70,7 @@
                 >Ver</v-btn>
             </template>
             <template v-slot:[`item.editar`]="{ item }">
-                <v-btn
-                small
-                rounded
-                color="primary"
-                elevation="0"
-                style="color:#fff;"
-                class="text-capitalize"
-                @click="ver_docs(item)"  
-                >Editar</v-btn>
+                <editarprocs :dato="item" @refresh="refrescar"/>
             </template>
             
             </v-data-table>
@@ -201,38 +193,7 @@
         </v-card>
         </v-dialog>
         
-        <v-dialog
-        v-model="dialog_editar"
-        fullscreen
-        hide-overlay
-        transition="dialog-bottom-transition"
-        > 
-                <v-card>
-                    <v-toolbar
-                    dark
-                    color="primary"
-                    >
-                    <v-toolbar-title>PROCESOS DEL DOCUMENTO</v-toolbar-title>
-                    <v-spacer></v-spacer>
-                    <v-toolbar-items>
-                        <v-btn
-                        dark
-                        text
-                        rounded
-                        @click="dialog_editar = false"
-                        >
-                        Cerrar
-                        </v-btn>
-                    </v-toolbar-items>
-                    </v-toolbar>
-                  
-                    <v-subheader>Información del documento </v-subheader>
-                    <v-card>
-                        <datosdoc :dato="doc"/>
-                        <soporteproc :dato="doc" @refresh="refrescar"/>
-                    </v-card>
-                </v-card>
-        </v-dialog>
+ 
 
     </v-card>
 </div>
@@ -276,7 +237,7 @@ export default {
         refrescar(result){
             if(result){
                 this.fecth_docs();
-                this.dialog_proc=false;
+                //this.dialog_proc=false;
             }
         },
         fecth_docs(){

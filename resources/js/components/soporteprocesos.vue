@@ -51,6 +51,8 @@
                 </v-card>
             </v-card-text>
         </v-card>
+
+
     </div>
 </template>
 <script>
@@ -68,6 +70,7 @@ export default {
                 documento:'',
                 proceso:''
             }),
+            
 
         }
     },computed:{
@@ -78,10 +81,11 @@ export default {
             /*if(!confirm('¿Estas seguro de realizar esta acción?')){
                 return
             }*/
+            
             this.form.proceso=proc.id;
             this.form.documento=proc.documento_id;
             this.form.post('/api/eliminar-derivacion').then(response=>{
-                this.$emit('refresh',true);
+                this.$emit('refresh',true);   
             })
         },  
     }
