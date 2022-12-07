@@ -204,6 +204,7 @@ class AdminController extends Controller
                 'tiempo_final'=>$d->fecha_fin,
                 'estado'=>$est,
                 'estado_fin'=>$d->estado,
+                'estado_res'=>$d->resuelto,
                 'prioridad'=>$d->prioridad,
                 'nombre_prioridad'=>$this->prioridad($d->prioridad),
                 'oficina_id'=>1,

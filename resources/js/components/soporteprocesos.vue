@@ -37,10 +37,13 @@
                         </v-row>
                         <v-row>
                             <v-col cols="12" class="py-0">
-                            <small v-if="dato.estado_fin || dato.estado_res"><v-chip class="ml-auto" small color="green" dark>Finalizado</v-chip></small>
-                            <small v-else-if="proc.estado_rep"><v-chip class="ml-auto" small color="primary" dark>Recepcionado</v-chip></small>
-                            <small v-else-if="proc.estado_der"><v-chip class="ml-auto" small color="purple" dark>derivado</v-chip></small>
-                            <small v-else><v-chip class="ml-auto" small color="grey" dark>Creado</v-chip></small>
+                            <small v-if="proc.estado_der"><v-chip class="ml-auto" small color="purple" dark>derivado</v-chip></small>
+                            <small v-else-if="dato.estado_fin "><v-chip class="ml-auto" small color="green" dark>Finalizado</v-chip></small>
+                            <small v-else-if=" dato.estado_res"><v-chip class="ml-auto" small color="orange" dark>Atendido</v-chip></small>
+                            <small v-else>
+                                <v-chip v-if="dato.proceso.length>1" class="ml-auto" small color="primary" dark>Recepcionado</v-chip>
+                                <v-chip v-else class="ml-auto" small color="grey" dark>Creado</v-chip>
+                            </small>
                             </v-col>
                         </v-row>
                         
