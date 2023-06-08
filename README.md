@@ -8,12 +8,12 @@ php v8
 
 tener instalado composer y mysql
 
-#comandos de instalación
+# comandos de instalación
 
 npm install
 composer install
 
-#configuracion
+# configuracion
 
 se tiene que crear una base de datos en mysql
 
@@ -23,13 +23,13 @@ y colocar en el apartado de NAME_DATABSE= nombre de tu base de datos
 ejecutar 
 php artisan migrate:fresh --seed
 
-#comandos de ejecucion
+# comandos de ejecucion
 
 npm run watch
 php artisan serve
 
 
-#credenciales iniciales
+# credenciales iniciales
 
 admin@gmail.com
 password
